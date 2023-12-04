@@ -8,6 +8,7 @@ public class Order
     [Display(Name="Fecha de la orden")]
     public DateTime OrderDate { get; set; }
     // Muchos a uno (N:1)
+    [Display(Name="Dirección")]
     public int AddressId { get; set; }
     [Display(Name="Dirección")]
     public Address ShippingAddress { get; set; }
