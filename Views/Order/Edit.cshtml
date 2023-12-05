@@ -1,4 +1,4 @@
-@model Examenes.Models.Order
+@model Examenes.ViewModels.OrderEditViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -19,15 +19,32 @@
                 <span asp-validation-for="OrderDate" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AddressId" class="control-label"></label>
-                <select asp-for="AddressId" class="form-control" asp-items="ViewBag.AddressId"></select>
-                <span asp-validation-for="AddressId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="ClientId" class="control-label"></label>
-                <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId"></select>
+                <select asp-for="ClientId" class="form-select">
+                    @if(Model.Clients.Any())
+                    {
+                        @foreach (var item in Model.Clients)
+                        {
+                            <option value="@item.Id">@item.FirstName @item.LastName - @item.Email</option>
+                        }
+                    }
+                </select>
                 <span asp-validation-for="ClientId" class="text-danger"></span>
             </div>
+
+            <div class="form-group">
+                <select class="select" multiple asp-for="ProductIds" name="ProductIds">
+                    @if(Model.Products.Any())
+                    {
+                        @foreach (var product in Model.Products)
+                        {
+                            <option value="@product.Id">@product.Name - @product.Description</option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="ProductIds" class="text-danger"></span>
+            </div>
+            
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

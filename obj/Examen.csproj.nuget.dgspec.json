@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "H:\\Herramientas de Programacion Segunda Cursada\\Examen\\Examen.csproj": {}
+    "h:\\Herramientas de Programacion Segunda Cursada\\Examen\\Examen.csproj": {}
   },
   "projects": {
-    "H:\\Herramientas de Programacion Segunda Cursada\\Examen\\Examen.csproj": {
+    "h:\\Herramientas de Programacion Segunda Cursada\\Examen\\Examen.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "H:\\Herramientas de Programacion Segunda Cursada\\Examen\\Examen.csproj",
+        "projectUniqueName": "h:\\Herramientas de Programacion Segunda Cursada\\Examen\\Examen.csproj",
         "projectName": "Examen",
-        "projectPath": "H:\\Herramientas de Programacion Segunda Cursada\\Examen\\Examen.csproj",
+        "projectPath": "h:\\Herramientas de Programacion Segunda Cursada\\Examen\\Examen.csproj",
         "packagesPath": "C:\\Users\\Mauro\\.nuget\\packages\\",
-        "outputPath": "H:\\Herramientas de Programacion Segunda Cursada\\Examen\\obj\\",
+        "outputPath": "h:\\Herramientas de Programacion Segunda Cursada\\Examen\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Mauro\\AppData\\Roaming\\NuGet\\NuGet.Config",

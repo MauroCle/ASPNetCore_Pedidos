@@ -147,21 +147,51 @@ namespace Examen.Controllers
         // GET: Order/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+            var clientsList = _context.Client.ToList();
+            var productsList = _context.Product.ToList();
+
+
             if (id == null || _context.Order == null)
             {
                 return NotFound();
             }
 
-            var order = await _context.Order.FindAsync(id);
+            var order = await _context.Order
+            .Include(x => x.Products)
+            .FirstOrDefaultAsync(m => m.Id == id);
+
             if (order == null)
             {
                 return NotFound();
             }
 
-            
+
+
+
+
+
+            OrderEditViewModel orderEdit = new OrderEditViewModel(){
+                    Id  = order.Id,
+                    OrderDate  = order.OrderDate,  
+                    Products = productsList, 
+                    ClientId  =  order.ClientId,
+                    Clients = clientsList,
+                    ProductIds = new List<int>()
+            };
+
+            if (order.Products != null && order.Products.Any())
+            {
+                foreach (var item in order.Products)
+                {
+                    if (item != null)
+                        orderEdit.ProductIds.Add(item.Id);
+
+                }
+            }
+                    
             ViewData["ClientId"] = new SelectList(_context.Client, "Id", "Id", order.ClientId);
             ViewData["AddressId"] = new SelectList(_context.Address, "Id", "Id", order.AddressId);
-            return View(order);
+            return View(orderEdit);
         }
 
         // POST: Order/Edit/5
@@ -169,23 +199,43 @@ namespace Examen.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,OrderDate,AddressId,ClientId")] Order order)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,OrderDate,ProductIds,ClientId,Clients,Products")] OrderEditViewModel orderView)
         {
-            if (id != order.Id)
+            if (id != orderView.Id)
             {
                 return NotFound();
             }
-
+            
+            ModelState.Remove("Clients");
+            ModelState.Remove("Products");
+            
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var order = await _context.Order
+                    .Include(o => o.Products) 
+                    .Include(o => o.Client)
+                    .Include(o => o.ShippingAddress)  
+                    .FirstOrDefaultAsync(m => m.Id == id);
+
+                    if (order == null)
+                    {
+                        return NotFound();
+                    }
+
+                    order.OrderDate = orderView.OrderDate;
+                    order.ClientId = orderView.ClientId;
+                    order.Client = await _context.Client.FirstOrDefaultAsync(x => x.Id == orderView.ClientId);
+                    order.ShippingAddress = await _context.Address.FirstOrDefaultAsync(x => x.ClientId == orderView.ClientId);
+                    order.Products = await _context.Product.Where(p => orderView.ProductIds.Contains(p.Id)).ToListAsync();
+
                     _context.Update(order);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!OrderExists(order.Id))
+                    if (!OrderExists(orderView.Id))
                     {
                         return NotFound();
                     }
@@ -196,9 +246,9 @@ namespace Examen.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Client, "Id", "Id", order.ClientId);
-            ViewData["AddressId"] = new SelectList(_context.Address, "Id", "Id", order.AddressId);
-            return View(order);
+            // ViewData["ClientId"] = new SelectList(_context.Client, "Id", "Id", orderView.ClientId);
+            // ViewData["AddressId"] = new SelectList(_context.Address, "Id", "Id", orderView.AddressId);
+            return View(orderView);
         }
 
         // GET: Order/Delete/5
