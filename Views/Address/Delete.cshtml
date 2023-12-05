@@ -1,4 +1,4 @@
-@model Examenes.Models.Address
+@model Examenes.ViewModels.AddressDeleteViewModel;
 
 @{
     ViewData["Title"] = "Delete";
@@ -48,10 +48,10 @@
             @Html.DisplayFor(model => model.PostalCode)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Client)
+            @Html.DisplayNameFor(model => model.ClientData)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Client.Id)
+            @Html.DisplayFor(model => model.ClientData)
         </dd>
     </dl>
     

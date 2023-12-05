@@ -1,4 +1,5 @@
-@model IEnumerable<Examenes.Models.Address>
+@model List<Examenes.ViewModels.AddressViewModel>;
+
 
 @{
     ViewData["Title"] = "Index";
@@ -13,25 +14,25 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.City)
+                @Html.DisplayNameFor(model => model.First().City)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Street)
+                @Html.DisplayNameFor(model => model.First().Street)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Number)
+                @Html.DisplayNameFor(model => model.First().Number)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Apartment)
+                @Html.DisplayNameFor(model => model.First().Apartment)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Notes)
+                @Html.DisplayNameFor(model => model.First().Notes)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PostalCode)
+                @Html.DisplayNameFor(model => model.First().PostalCode)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Client)
+                 @Html.DisplayNameFor(model => model.First().ClientFirstName) @*TODO en el DataAnotation de ClientFirstName, hay que cambiarle el display como Clientew *@
             </th>
             <th></th>
         </tr>
@@ -58,7 +59,7 @@
                 @Html.DisplayFor(modelItem => item.PostalCode)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Client.Id)
+                @Html.DisplayFor(modelItem => item.ClientFirstName) @Html.DisplayFor(modelItem => item.ClientLastName)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
