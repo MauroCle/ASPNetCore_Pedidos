@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Examenes.Data;
 using Examenes.Models;
+using Examenes.ViewModels;
 
 namespace Examen.Controllers
 {
@@ -48,7 +49,21 @@ namespace Examen.Controllers
         // GET: Address/Create
         public IActionResult Create()
         {
-            ViewData["ClientId"] = new SelectList(_context.Client, "Id", "Id");
+            var query = from Client in _context.Client select Client; 
+
+
+            if(query.ToList().Count > 0) 
+            {
+                AddressCreateViewModel addressView = new AddressCreateViewModel();
+
+                foreach (var item in query)
+                {
+                    addressView.Clients.Add(item);
+                }
+                return View(addressView);
+            }
+            
+
             return View();
         }
 
@@ -57,17 +72,30 @@ namespace Examen.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,City,Street,Number,Apartment,Notes,PostalCode,ClientId")] Address address)
+        public async Task<IActionResult> Create([Bind("Id,City,Street,Number,Apartment,Notes,PostalCode,ClientId")] AddressCreateViewModel addressView)
         {
+
             ModelState.Remove("Orders");
             if (ModelState.IsValid)
             {
+            var address = new Address{
+                City = addressView.City,
+                Street = addressView.Street,
+                Number = addressView.Number,
+                Apartment = addressView.Apartment,
+                Notes = addressView.Notes,
+                PostalCode = addressView.PostalCode,
+                ClientId = addressView.ClientId,
+                };
+
+
+
                 _context.Add(address);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Client, "Id", "Id", address.ClientId);
-            return View(address);
+            ViewData["ClientId"] = new SelectList(_context.Client, "Id", "Id", addressView.ClientId);
+            return View(addressView);
         }
 
         // GET: Address/Edit/5

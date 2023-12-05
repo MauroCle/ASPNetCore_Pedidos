@@ -48,6 +48,7 @@ namespace Examen.Controllers
            var addresses = await _context.Address.Where(m => m.ClientId == id).ToListAsync();
 
             ClientDetailsViewModel clientView = new ClientDetailsViewModel(){
+                Id= client.Id,
                 FirstName = client.FirstName,
                 LastName = client.LastName,
                 Email= client.Email,
@@ -112,7 +113,8 @@ namespace Examen.Controllers
         // GET: Client/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Client == null)
+
+            if (id == null || _context.Client == null || id==0)
             {
                 return NotFound();
             }
@@ -121,6 +123,7 @@ namespace Examen.Controllers
            var addresses = await _context.Address.Where(m => m.ClientId == id).ToListAsync();
 
             ClientDetailsViewModel clientView = new ClientDetailsViewModel(){
+                Id = client.Id,
                 FirstName = client.FirstName,
                 LastName = client.LastName,
                 Email= client.Email,
@@ -141,8 +144,9 @@ namespace Examen.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Email,PhoneNumber")] Client client)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Email,PhoneNumber")] ClientDetailsViewModel client)
         {
+            //TODO Aplicar el ViewModel
             if (id != client.Id)
             {
                 return NotFound();
@@ -179,14 +183,23 @@ namespace Examen.Controllers
                 return NotFound();
             }
 
-            var client = await _context.Client
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (client == null)
+            var client = await _context.Client.FindAsync(id);
+           var addresses = await _context.Address.Where(m => m.ClientId == id).ToListAsync();
+
+            ClientDeleteViewModel clientView = new ClientDeleteViewModel(){
+                FirstName = client.FirstName,
+                LastName = client.LastName,
+                Email= client.Email,
+                PhoneNumber = client.PhoneNumber,
+                Addresses = addresses
+            };
+
+            if (client == null||addresses ==null)
             {
                 return NotFound();
             }
 
-            return View(client);
+            return View(clientView);
         }
 
         // POST: Client/Delete/5
@@ -194,14 +207,21 @@ namespace Examen.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            //TODO Testar que las direcciones asociadas al client se eliminen correctamente
             if (_context.Client == null)
             {
                 return Problem("Entity set 'YaPedidosContext.Client'  is null.");
             }
             var client = await _context.Client.FindAsync(id);
+                var addresses = await _context.Address.Where(m => m.ClientId == id).ToListAsync();
             if (client != null)
-            {
+            {   
+                foreach(var item in addresses)
+                {
+                    _context.Address.Remove(item);
+                }
                 _context.Client.Remove(client);
+                
             }
             
             await _context.SaveChangesAsync();
