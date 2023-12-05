@@ -9,11 +9,11 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Examen
 build_property.RootNamespace = Examen
-build_property.ProjectDir = h:\Herramientas de Programacion Segunda Cursada\Examen\
+build_property.ProjectDir = H:\Herramientas de Programacion Segunda Cursada\Examen\
 build_property.RazorLangVersion = 7.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = h:\Herramientas de Programacion Segunda Cursada\Examen
+build_property.MSBuildProjectDirectory = H:\Herramientas de Programacion Segunda Cursada\Examen
 build_property._RazorSourceGeneratorDebug = 
 
 [H:/Herramientas de Programacion Segunda Cursada/Examen/Views/Address/Create.cshtml]

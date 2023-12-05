@@ -11,6 +11,8 @@ public class Product
     public string Description { get; set; }
     [Display(Name="Precio")]
     public int Price { get; set; }
+    public int Stock {get;set;}
+
     // Muchos a muchos (N:N)
     [Display(Name="Ordenes")]
     public ICollection<Order> Orders { get; set; }
