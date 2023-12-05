@@ -122,6 +122,11 @@ namespace Examen.Controllers
             var client = await _context.Client.FindAsync(id);
            var addresses = await _context.Address.Where(m => m.ClientId == id).ToListAsync();
 
+            if (client == null || addresses == null) 
+            {
+                return NotFound();
+            }
+            
             ClientDetailsViewModel clientView = new ClientDetailsViewModel(){
                 Id = client.Id,
                 FirstName = client.FirstName,
@@ -130,12 +135,7 @@ namespace Examen.Controllers
                 PhoneNumber = client.PhoneNumber,
                 Addresses = addresses
             };
-
-
-            if (client == null || addresses == null) 
-            {
-                return NotFound();
-            }
+            
             return View(clientView);
         }
 

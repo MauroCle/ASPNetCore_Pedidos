@@ -1,9 +1,10 @@
 using System.ComponentModel.DataAnnotations;
+using Examenes.Models;
 
-namespace Examenes.Models;
+namespace Examenes.ViewModels;
 
-public class Product
-{
+public class ProductViewModel{
+
     public int Id { get; set; }
     [Display(Name="Nombre")]
     public string Name { get; set; }
@@ -11,9 +12,6 @@ public class Product
     public string Description { get; set; }
     [Display(Name="Precio")]
     public int Price { get; set; }
-    public int Stock {get;set;}
-
-    // Muchos a muchos (N:N)
-    [Display(Name="Ordenes")]
-    public ICollection<Order>? Orders { get; set; }
+    public int Stock { get; set; }
 }
+
