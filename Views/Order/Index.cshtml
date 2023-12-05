@@ -1,4 +1,4 @@
-@model IEnumerable<Examenes.Models.Order>
+@model List<Examenes.ViewModels.OrderViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -13,13 +13,16 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.OrderDate)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().OrderDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ShippingAddress)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().ShippingAddressData)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Client)
+                @Html.DisplayNameFor(model => model.FirstOrDefault().ProductsQuantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().ClientData)
             </th>
             <th></th>
         </tr>
@@ -31,10 +34,13 @@
                 @Html.DisplayFor(modelItem => item.OrderDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ShippingAddress.Id)
+                @Html.DisplayFor(modelItem => item.ShippingAddressData)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Client.Id)
+                @Html.DisplayFor(modelItem => item.ProductsQuantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientData)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

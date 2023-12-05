@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Examenes.Data;
 using Examenes.Models;
+using Examenes.ViewModels;
 
 namespace Examen.Controllers
 {
@@ -20,10 +21,33 @@ namespace Examen.Controllers
         }
 
         // GET: Order
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string NameFilter)
         {
-            var yaPedidosContext = _context.Order.Include(o => o.Client).Include(o => o.ShippingAddress);
-            return View(await yaPedidosContext.ToListAsync());
+              var query = from Order in _context.Order select Order;
+
+            if(!string.IsNullOrEmpty(NameFilter))
+            {
+                query = query.Where(x => x.Client.FirstName.ToLower().Contains(NameFilter.ToLower()) || 
+                x.Client.LastName.ToLower().Contains(NameFilter.ToLower()) ||
+                x.Client.Email.ToLower().Contains(NameFilter.ToLower()) ||
+                x.ShippingAddress.City.ToLower().Contains(NameFilter.ToLower())||
+                x.ShippingAddress.Street.ToLower().Contains(NameFilter.ToLower())||
+                x.ShippingAddress.Number.ToString().Contains(NameFilter.ToLower())
+                );
+            }
+
+            var model = query.Select(item => new OrderViewModel
+                {
+                    Id = item.Id,
+                    OrderDate = item.OrderDate,
+                    ShippingAddressData = $"{item.ShippingAddress.City} - {item.ShippingAddress.Street} {item.ShippingAddress.Number} ({item.ShippingAddress.PostalCode})",
+                    ProductsQuantity = item.Products.Count(),
+                    ClientData = $"{item.Client.FirstName} {item.Client.LastName} - {item.Client.Email}"
+                }).ToList();
+            
+
+             return View(model);
+
         }
 
         // GET: Order/Details/5
@@ -38,6 +62,10 @@ namespace Examen.Controllers
                 .Include(o => o.Client)
                 .Include(o => o.ShippingAddress)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
+            
+
+            
             if (order == null)
             {
                 return NotFound();
@@ -49,28 +77,64 @@ namespace Examen.Controllers
         // GET: Order/Create
         public IActionResult Create()
         {
-            ViewData["ClientId"] = new SelectList(_context.Client, "Id", "Id");
-            ViewData["AddressId"] = new SelectList(_context.Address, "Id", "Id");
-            return View();
+            var clientsList = _context.Client.ToList();
+            var productsList = _context.Product.ToList();
+
+            var viewModel = new OrderCreateViewModel
+            {
+                Clients = clientsList,
+                Products = productsList
+            };
+
+            return View(viewModel);
         }
 
         // POST: Order/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,OrderDate,AddressId,ClientId")] Order order)
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [HttpPost]
+    public async Task<IActionResult> Create(OrderCreateViewModel viewModel)
+    {
+        var clientsList = _context.Client.ToList();
+        var productsList = _context.Product.ToList();
+        List<Product> products = new List<Product>();
+        ModelState.Remove("Products");
+        ModelState.Remove("Clients");
+        // TODO validaciones, view model null, id null, etc
+        if (ModelState.IsValid)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(order);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+            Client clientOrder = _context.Client.Include(x => x.Address).Where(x => x.Id == viewModel.ClientId).FirstOrDefault();
+
+            foreach(var item in viewModel.ProductIds){
+
+                products.Add(productsList.Where(x => x.Id == item).FirstOrDefault());
+                
             }
-            ViewData["ClientId"] = new SelectList(_context.Client, "Id", "Id", order.ClientId);
-            ViewData["AddressId"] = new SelectList(_context.Address, "Id", "Id", order.AddressId);
-            return View(order);
+
+            Order newOrder = new Order();
+
+            newOrder.OrderDate = viewModel.OrderDate;
+            newOrder.AddressId = clientOrder.Address.Id;
+            newOrder.ShippingAddress = clientOrder.Address;
+            newOrder.Products = productsList;
+            newOrder.ClientId = clientOrder.Id;                    
+           
+            
+            _context.Add(newOrder);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
         }
+
+        viewModel.Clients = clientsList;
+        viewModel.Products = productsList;
+
+        return View(viewModel);
+    }
+    
+        
 
         // GET: Order/Edit/5
         public async Task<IActionResult> Edit(int? id)

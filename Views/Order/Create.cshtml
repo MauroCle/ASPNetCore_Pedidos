@@ -1,12 +1,14 @@
-@model Examenes.Models.Order
+@model Examenes.ViewModels.OrderCreateViewModel
+@using Examenes.Models
 
 @{
     ViewData["Title"] = "Create";
+    var clientsList = ViewData["Clients"] as List<Client>;   
+    var productsList = ViewData["Products"] as List<Product>; 
 }
 
-<h1>Create</h1>
+<h1>Create order</h1>
 
-<h4>Order</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -17,14 +19,29 @@
                 <input asp-for="OrderDate" class="form-control" />
                 <span asp-validation-for="OrderDate" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="AddressId" class="control-label"></label>
-                <select asp-for="AddressId" class ="form-control" asp-items="ViewBag.AddressId"></select>
-            </div>
+            
             <div class="form-group">
                 <label asp-for="ClientId" class="control-label"></label>
-                <select asp-for="ClientId" class ="form-control" asp-items="ViewBag.ClientId"></select>
+                <select asp-for="ClientId" class="form-select">
+                    @foreach (var item in Model.Clients ?? Enumerable.Empty<Client>())
+                    {
+                        <option value="@item.Id">@item.FirstName @item.LastName - @item.Email</option>
+                    }
+                </select>
+                <span asp-validation-for="ClientId" class="text-danger"></span>
             </div>
+
+            <div class="form-group">
+                <select class="select" multiple asp-for="ProductIds">
+                    @foreach (var product in Model.Products ?? Enumerable.Empty<Product>())
+                    {
+                        <option value="@product.Id">@product.Name - @product.Description</option>
+                    }
+                </select>
+                <span asp-validation-for="ProductIds" class="text-danger"></span>
+            </div>
+            <!--Lo de arriba se el agregó class="select" sin testerlo, es para el css de bootstrap-->
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
