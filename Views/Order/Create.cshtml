@@ -32,15 +32,15 @@
             </div>
 
             <div class="form-group">
-                <select class="select" multiple asp-for="ProductIds">
-                    @foreach (var product in Model.Products ?? Enumerable.Empty<Product>())
-                    {
-                        <option value="@product.Id">@product.Name - @product.Description</option>
-                    }
-                </select>
-                <span asp-validation-for="ProductIds" class="text-danger"></span>
-            </div>
-            <!--Lo de arriba se el agregó class="select" sin testerlo, es para el css de bootstrap-->
+                    <select class="select" multiple asp-for="ProductIds" name="ProductIds">
+                        @foreach (var product in Model.Products ?? Enumerable.Empty<Product>())
+                        {
+                            <option value="@product.Id">@product.Name - @product.Description</option>
+                        }
+                    </select>
+                    <span asp-validation-for="ProductIds" class="text-danger"></span>
+                </div>
+            
 
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

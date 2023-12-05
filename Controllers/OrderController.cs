@@ -61,17 +61,24 @@ namespace Examen.Controllers
             var order = await _context.Order
                 .Include(o => o.Client)
                 .Include(o => o.ShippingAddress)
+                .Include(o => o.Products)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
-            
-
-            
             if (order == null)
             {
                 return NotFound();
             }
+        
+            OrderDetailViewModel OrderDetail = new OrderDetailViewModel(){
+                    Id  = order.Id,
+                    OrderDate  = order.OrderDate,  
+                    ShippingAddressData  = $"{order.ShippingAddress.City} - {order.ShippingAddress.Street} {order.ShippingAddress.Number} ({order.ShippingAddress.PostalCode}) || {order.ShippingAddress.Notes}", 
+                    Products = order.Products != null ? order.Products.ToList() : new List<Product>(), 
+                    ClientData  =  $"{order.Client.FirstName} {order.Client.LastName} - ({order.Client.PhoneNumber}) || ({order.Client.Email})"
 
-            return View(order);
+                };
+
+            return View(OrderDetail);
         }
 
         // GET: Order/Create
@@ -82,6 +89,7 @@ namespace Examen.Controllers
 
             var viewModel = new OrderCreateViewModel
             {
+                OrderDate = DateTime.Today,
                 Clients = clientsList,
                 Products = productsList
             };
@@ -109,7 +117,7 @@ namespace Examen.Controllers
 
             foreach(var item in viewModel.ProductIds){
 
-                products.Add(productsList.Where(x => x.Id == item).FirstOrDefault());
+                products.Add(productsList.FirstOrDefault(x => x.Id == item));
                 
             }
 
@@ -118,7 +126,7 @@ namespace Examen.Controllers
             newOrder.OrderDate = viewModel.OrderDate;
             newOrder.AddressId = clientOrder.Address.Id;
             newOrder.ShippingAddress = clientOrder.Address;
-            newOrder.Products = productsList;
+            newOrder.Products = products;
             newOrder.ClientId = clientOrder.Id;                    
            
             
@@ -149,6 +157,8 @@ namespace Examen.Controllers
             {
                 return NotFound();
             }
+
+            
             ViewData["ClientId"] = new SelectList(_context.Client, "Id", "Id", order.ClientId);
             ViewData["AddressId"] = new SelectList(_context.Address, "Id", "Id", order.AddressId);
             return View(order);
