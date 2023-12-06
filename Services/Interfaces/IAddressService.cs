@@ -1,3 +1,4 @@
+using Examenes.Models;
 using Examenes.ViewModels;
 
 namespace  Examenes.Services;
@@ -7,7 +8,7 @@ namespace  Examenes.Services;
         Task<List<AddressViewModel>> GetAddressesAsync();
         Task<List<AddressViewModel>> GetAddressesAsync(string filter);
         Task<AddressViewModel> GetAddressDetailsAsync(int id);
-        Task<AddressCreateViewModel> GetCreateViewModelAsync();
+        Task<AddressCreateViewModel> GetCreateViewModelAsync(List<Client> clients);
         Task<bool> CreateAddressAsync(AddressCreateViewModel addressView);
         Task<AddressEditViewModel> GetEditViewModelAsync(int id);
         Task<bool> EditAddressAsync(int id, AddressEditViewModel addressView);

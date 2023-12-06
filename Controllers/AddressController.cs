@@ -21,10 +21,12 @@ namespace Examen.Controllers
         //     _context = context;
         // }
         private readonly IAddressService _addressService;
+        private readonly IClientService _clientService;
 
-        public AddressController(IAddressService addressService)
+        public AddressController(IAddressService addressService,IClientService clientService)
         {
             _addressService = addressService;
+            _clientService = clientService;
         }
 
         // GET: Address
@@ -57,11 +59,15 @@ namespace Examen.Controllers
         // GET: Address/Create
         public async Task<IActionResult> Create()
         {
-            var addressView = await _addressService.GetCreateViewModelAsync();
 
+            var clientsWithoutAddress = await _clientService.GetClientsWithoutAddressAsync();
+            
+
+            var addressView = await _addressService.GetCreateViewModelAsync(clientsWithoutAddress);
+            
             if (addressView == null)
             {
-                return RedirectToAction(nameof(Index));
+                addressView = new AddressCreateViewModel(); // O inicializa según tus necesidades
             }
 
             return View(addressView);
@@ -92,12 +98,20 @@ namespace Examen.Controllers
             {
                 return RedirectToAction(nameof(Index));
             }
-
+            var clientsWithoutAddress = await _clientService.GetClientsWithoutAddressAsync();
+            
             var addressView = await _addressService.GetEditViewModelAsync(id.Value);
 
             if (addressView == null)
             {
                 return RedirectToAction(nameof(Index));
+            }
+
+            if(clientsWithoutAddress != null && clientsWithoutAddress.Any())
+            {
+                foreach(var item in clientsWithoutAddress){
+                addressView.Clients.Add(item);
+                }
             }
 
             return View(addressView);

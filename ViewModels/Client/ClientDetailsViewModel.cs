@@ -14,7 +14,7 @@ public class ClientDetailsViewModel{
     public string Email {get; set;} = null!;
     [Display(Name="Numero Telefonico")]
    public string PhoneNumber {get; set;} = null!;
-   [Display(Name="Direcciones")]
-    public List<Address> Addresses {get; set;} = new List<Address>(); 
+   [Display(Name="Direccion")]
+    public Address Address {get; set;} = null!;
 
 }

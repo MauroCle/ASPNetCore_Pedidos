@@ -15,6 +15,6 @@ public class ClientDeleteViewModel{
     [Display(Name = "Numero telefonico")]
     public string PhoneNumber {get; set;} = null!;
     [Display(Name = "Direcciones")]
-    public List<Address> Addresses {get; set;} = new List<Address>();
+    public Address Address {get; set;} =null!;
 
 }

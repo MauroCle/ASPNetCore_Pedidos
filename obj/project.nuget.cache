@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "2RUS6akwjfR7H6AEDNM8xkQc+I1AawW26O5njUeul2UvHxudXlRY2eUA2JL0LVJqLRrd/Xx1zq8DIJj4LeusfQ==",
+  "dgSpecHash": "rIvXGNoDT0lkQ+OdGVqqFNZgk3ejGKhgaQ71Yjsa/kdu8Gj94uDn7qwhRp+NHq5gZznG9LnTTFDSnXNwwvM4jA==",
   "success": true,
-  "projectFilePath": "H:\\Herramientas de Programacion Segunda Cursada\\Examen\\Examen.csproj",
+  "projectFilePath": "h:\\Herramientas de Programacion Segunda Cursada\\Examen\\Examen.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Mauro\\.nuget\\packages\\humanizer\\2.14.1\\humanizer.2.14.1.nupkg.sha512",
     "C:\\Users\\Mauro\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",

@@ -56,8 +56,10 @@
     </dl>
 
     <form asp-action="Delete" onsubmit="return confirm('¿Estas seguro de eliminar esta dirección?')">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <div class="row col-4 justify-content-around">
+        <input type="hidden" asp-for="Id"/>
+        <input type="submit" value="Delete" class="btn btn-danger mt-3 col-4" /> 
+        <a asp-action="Index" class="btn btn-primary mt-3 col-4">Volver a la lista</a>
+        </div>
     </form>
 </div>

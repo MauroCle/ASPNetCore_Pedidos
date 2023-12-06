@@ -30,14 +30,26 @@ namespace Examenes.Services
             return await query.ToListAsync();
         }
 
+        public async Task<List<Client>> GetClientsWithoutAddressAsync()
+        {
+            var query = from client in _context.Client.Include(x=> x.Address) select client;
+
+            if (query.Any())
+            {
+                query = query.Where(x => x.Address == null || string.IsNullOrEmpty(x.Address.Street));
+            }
+
+            return await query.ToListAsync();
+        }
+
         public async Task<Client> GetClientByIdAsync(int id)
         {
             return await _context.Client.FindAsync(id);
         }
 
-        public async Task<List<Address>> GetAddressesByClientIdAsync(int clientId)
+        public async Task<Address> GetAddressByClientIdAsync(int clientId)
         {
-            return await _context.Address.Where(m => m.ClientId == clientId).ToListAsync();
+            return await _context.Address.Where(m => m.ClientId == clientId).FirstOrDefaultAsync();
         }
 
         public async Task<Client> CreateClientAsync(Client client)

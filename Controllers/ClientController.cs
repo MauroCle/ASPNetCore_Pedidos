@@ -38,7 +38,7 @@ namespace Examen.Controllers
             }
 
             var client = await _clientService.GetClientByIdAsync(id.Value);
-            var addresses = await _clientService.GetAddressesByClientIdAsync(id.Value);
+            var address = await _clientService.GetAddressByClientIdAsync(id.Value);
 
             if (client == null)
             {
@@ -52,7 +52,7 @@ namespace Examen.Controllers
                 LastName = client.LastName,
                 Email = client.Email,
                 PhoneNumber = client.PhoneNumber,
-                Addresses = addresses
+                Address = address
             };
 
             return View(clientView);
@@ -109,7 +109,7 @@ namespace Examen.Controllers
             }
 
             var client = await _clientService.GetClientByIdAsync(id.Value);
-            var addresses = await _clientService.GetAddressesByClientIdAsync(id.Value);
+            var address = await _clientService.GetAddressByClientIdAsync(id.Value);
 
             if (client == null)
             {
@@ -123,7 +123,7 @@ namespace Examen.Controllers
                 LastName = client.LastName,
                 Email = client.Email,
                 PhoneNumber = client.PhoneNumber,
-                Addresses = addresses
+                Address = address
             };
 
             return View(clientView);
@@ -165,7 +165,7 @@ namespace Examen.Controllers
             }
 
             var client = await _clientService.GetClientByIdAsync(id.Value);
-            var addresses = await _clientService.GetAddressesByClientIdAsync(id.Value);
+            var address = await _clientService.GetAddressByClientIdAsync(id.Value);
 
             if (client == null)
             {
@@ -178,7 +178,7 @@ namespace Examen.Controllers
                 LastName = client.LastName,
                 Email = client.Email,
                 PhoneNumber = client.PhoneNumber,
-                Addresses = addresses
+                Address = address
             };
 
             return View(clientView);

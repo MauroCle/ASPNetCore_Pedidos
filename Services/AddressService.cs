@@ -87,15 +87,14 @@ public class AddressService : IAddressService
         return addressView;
     }
 
-    public async Task<AddressCreateViewModel> GetCreateViewModelAsync()
+    public async Task<AddressCreateViewModel> GetCreateViewModelAsync(List<Client> clients)
     {
-        var query = from client in _context.Client select client;
 
-        if (query.Any())
+        if (clients.Any())
         {
             var addressView = new AddressCreateViewModel();
 
-            foreach (var item in query)
+            foreach (var item in clients)
             {
                 addressView.Clients.Add(item);
             }
@@ -143,7 +142,7 @@ public class AddressService : IAddressService
             return null;
         }
 
-        var query = from client in _context.Client select client;
+        var query = from client in _context.Client.Where( x=> x.Id == address.ClientId) select client;
 
         if (query.Any())
         {

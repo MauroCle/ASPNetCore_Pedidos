@@ -37,33 +37,32 @@
             @Html.DisplayFor(model => model.PhoneNumber)
         </dd>
         <hr />
-        @if (Model.Addresses.Count > 0)
-            @for (int i = 0; i < Model.Addresses.Count; i++)
+        @if (Model.Address != null)
             {
                 <div class="row">
-                    <dt class="col-sm-12 h3 mt-4"> <p>Direccion @(i+1)</p> </dt><dd></dd>
+                    <dt class="col-sm-12 h3 mt-4"> <p>Direccion</p> </dt><dd></dd>
                     <dt class="col-sm-2"><p>City:</p></dt>
-                    <dd class="col-sm-10"><p>@Model.Addresses[i].City</p></dd>
+                    <dd class="col-sm-10"><p>@Model.Address.City</p></dd>
 
                     <dt class="col-sm-2"><p>Street:</p></dt>
-                    <dd class="col-sm-10"><p>@Model.Addresses[i].Street</p></dd>
+                    <dd class="col-sm-10"><p>@Model.Address.Street</p></dd>
 
                     <dt class="col-sm-2"><p>Number:</p></dt>
-                    <dd class="col-sm-10"><p>@Model.Addresses[i].Number</p></dd>
+                    <dd class="col-sm-10"><p>@Model.Address.Number</p></dd>
 
                     <dt class="col-sm-2"><p>Apartment:</p></dt>
-                    <dd class="col-sm-10"><p>@Model.Addresses[i].Apartment</p></dd>
+                    <dd class="col-sm-10"><p>@Model.Address.Apartment</p></dd>
 
                     <dt class="col-sm-2"><p>Notes:</p></dt>
-                    <dd class="col-sm-10"><p>@Model.Addresses[i].Notes</p></dd>
+                    <dd class="col-sm-10"><p>@Model.Address.Notes</p></dd>
 
                     <dt class="col-sm-2"><p>Postal Code:</p></dt>
-                    <dd class="col-sm-10"><p>@Model.Addresses[i].PostalCode</p></dd>
+                    <dd class="col-sm-10"><p>@Model.Address.PostalCode</p></dd>
                 </div>
             }
-        <div>
-            <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-            <a asp-action="Index">Back to List</a>
+        <div class="form-group row justify-content-around col-4">
+            <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary mt-3 col-4">Editar</a> 
+            <a asp-action="Index" class="btn btn-primary mt-3 col-4">Volver a la lista</a>
         </div>
     </dlv>
 </div>
