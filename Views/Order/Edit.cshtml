@@ -21,7 +21,7 @@
             <div class="form-group">
                 <label asp-for="ClientId" class="control-label"></label>
                 <select asp-for="ClientId" class="form-select">
-                    @if(Model.Clients.Any())
+                    @if (Model.Clients.Any())
                     {
                         @foreach (var item in Model.Clients)
                         {
@@ -34,7 +34,7 @@
 
             <div class="form-group">
                 <select class="select" multiple asp-for="ProductIds" name="ProductIds">
-                    @if(Model.Products.Any())
+                    @if (Model.Products.Any())
                     {
                         @foreach (var product in Model.Products)
                         {
@@ -44,7 +44,7 @@
                 </select>
                 <span asp-validation-for="ProductIds" class="text-danger"></span>
             </div>
-            
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
@@ -57,5 +57,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

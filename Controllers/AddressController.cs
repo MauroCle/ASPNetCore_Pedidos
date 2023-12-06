@@ -31,41 +31,41 @@ namespace Examen.Controllers
         public async Task<IActionResult> Index()
         {
             var addressesView = await _addressService.GetAddressesAsync();
-        return View(addressesView);
+            return View(addressesView);
         }
 
 
         // GET: Address/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-        if (id == null)
-        {
-            return NotFound();
-        }
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        var addressView = await _addressService.GetAddressDetailsAsync(id.Value);
+            var addressView = await _addressService.GetAddressDetailsAsync(id.Value);
 
-        if (addressView == null)
-        {
-            return NotFound();
-        }
+            if (addressView == null)
+            {
+                return NotFound();
+            }
 
-        return View(addressView);
+            return View(addressView);
         }
 
         // GET: Address/Create
-    public async Task<IActionResult> Create()
-    {
-        var addressView = await _addressService.GetCreateViewModelAsync();
-
-        if (addressView == null)
+        public async Task<IActionResult> Create()
         {
-            // TODO Manejar el caso cuando no hay clientes disponibles
-            return NotFound();
-        }
+            var addressView = await _addressService.GetCreateViewModelAsync();
 
-        return View(addressView);
-    }
+            if (addressView == null)
+            {
+                // TODO Manejar el caso cuando no hay clientes disponibles
+                return NotFound();
+            }
+
+            return View(addressView);
+        }
 
         // POST: Address/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -75,32 +75,32 @@ namespace Examen.Controllers
         public async Task<IActionResult> Create([Bind("Id,City,Street,Number,Apartment,Notes,PostalCode,ClientId")] AddressCreateViewModel addressView)
         {
 
-        if (await _addressService.CreateAddressAsync(addressView))
-        {
-            return RedirectToAction(nameof(Index));
-        }
+            if (await _addressService.CreateAddressAsync(addressView))
+            {
+                return RedirectToAction(nameof(Index));
+            }
 
-        // Handle validation errors or other creation issues
-        // ViewData["ClientId"] = new SelectList(_context.Client, "Id", "Id", addressView.ClientId);
-        return View(addressView);
+            // Handle validation errors or other creation issues
+            // ViewData["ClientId"] = new SelectList(_context.Client, "Id", "Id", addressView.ClientId);
+            return View(addressView);
         }
 
         // GET: Address/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-        if (id == null)
-        {
-            return NotFound();
-        }
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        var addressView = await _addressService.GetEditViewModelAsync(id.Value);
+            var addressView = await _addressService.GetEditViewModelAsync(id.Value);
 
             if (addressView == null)
             {
                 return NotFound();
             }
 
-        return View(addressView);
+            return View(addressView);
         }
 
         // POST: Address/Edit/5
@@ -110,32 +110,32 @@ namespace Examen.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,City,Street,Number,Apartment,Notes,PostalCode,ClientId")] AddressEditViewModel addressView)
         {
-           if (await _addressService.EditAddressAsync(id, addressView))
-        {
-            return RedirectToAction(nameof(Index));
-        }
+            if (await _addressService.EditAddressAsync(id, addressView))
+            {
+                return RedirectToAction(nameof(Index));
+            }
 
-        // Handle validation errors or other edit issues
-        // ViewData["ClientId"] = new SelectList(_context.Client, "Id", "Id", addressView.ClientId);
-        return View(addressView);
+            // Handle validation errors or other edit issues
+            // ViewData["ClientId"] = new SelectList(_context.Client, "Id", "Id", addressView.ClientId);
+            return View(addressView);
         }
 
         // GET: Address/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-             if (id == null)
-        {
-            return NotFound();
-        }
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-        var addressView = await _addressService.GetDeleteViewModelAsync(id.Value);
+            var addressView = await _addressService.GetDeleteViewModelAsync(id.Value);
 
-        if (addressView == null)
-        {
-            return NotFound();
-        }
+            if (addressView == null)
+            {
+                return NotFound();
+            }
 
-        return View(addressView);
+            return View(addressView);
         }
 
         // POST: Address/Delete/5
@@ -143,14 +143,14 @@ namespace Examen.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-        if (await _addressService.DeleteAddressAsync(id))
-        {
-            return RedirectToAction(nameof(Index));
-        }
+            if (await _addressService.DeleteAddressAsync(id))
+            {
+                return RedirectToAction(nameof(Index));
+            }
 
-        // Handle deletion errors
-        return RedirectToAction(nameof(Delete), new { id = id, error = true });
-    
+            // Handle deletion errors
+            return RedirectToAction(nameof(Delete), new { id = id, error = true });
+
         }
 
         // private bool AddressExists(int id)

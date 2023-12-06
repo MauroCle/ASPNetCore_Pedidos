@@ -13,9 +13,9 @@
     <form method="get" asp-action="Index" asp-controller="Product">
         <div class="form-group mx-sm-3 mb-2 row" style="max-width:600px">
             <input class="form-control " asp-for="NameFilter" style="max-width:50%">
-            <button type="submit" class="btn btn-primary ml-3"  style="max-width:15%; margin-left: 10px;">Buscar</button>
+            <button type="submit" class="btn btn-primary ml-3" style="max-width:15%; margin-left: 10px;">Buscar</button>
         </div>
-        
+
     </form>
 </div>
 <table class="table">
@@ -37,26 +37,27 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Products) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-                        <td>
-                @Html.DisplayFor(modelItem => item.Stock)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.Products)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Stock)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

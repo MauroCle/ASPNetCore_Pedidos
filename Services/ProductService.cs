@@ -40,6 +40,13 @@ namespace Examenes.Services
             }).ToList();
         }
 
+        public async Task<List<Product>> GetAvalibleProductsAsync()
+        {
+            var query = _context.Product.Where(x => x.Stock>0).AsQueryable();
+
+            return  await query.ToListAsync(); 
+        }
+
         public async Task<ProductViewModel?> GetProductAsync(int id)
         {
             var product = await _context.Product.FindAsync(id);
@@ -76,7 +83,7 @@ namespace Examenes.Services
 
             if (existingProduct == null)
             {
-                // Manejar la situación donde el producto no existe
+                // TODO Manejar la situación donde el producto no existe
                 return;
             }
 

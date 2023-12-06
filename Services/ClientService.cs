@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Examenes.Services
 {
-public class ClientService : IClientService
+    public class ClientService : IClientService
     {
         private readonly YaPedidosContext _context;
 
@@ -52,7 +52,7 @@ public class ClientService : IClientService
             _context.Add(client);
             await _context.SaveChangesAsync();
 
-            address.ClientId = client.Id; // Asignar el Id del cliente recién creado a la dirección
+            address.ClientId = client.Id; 
             _context.Add(address);
             await _context.SaveChangesAsync();
 

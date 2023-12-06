@@ -12,7 +12,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<IProductService, ProductService>();
-//builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
 
 
 var app = builder.Build();

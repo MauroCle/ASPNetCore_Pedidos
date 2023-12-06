@@ -13,7 +13,7 @@ public class AddressService : IAddressService
         _context = context;
     }
 
-   public async Task<List<AddressViewModel>> GetAddressesAsync()
+    public async Task<List<AddressViewModel>> GetAddressesAsync()
     {
         var addresses = await _context.Address.Include(a => a.Client).ToListAsync();
 
@@ -81,7 +81,7 @@ public class AddressService : IAddressService
         return null;
     }
 
-  public async Task<bool> CreateAddressAsync(AddressCreateViewModel addressView)
+    public async Task<bool> CreateAddressAsync(AddressCreateViewModel addressView)
     {
         var context = new ValidationContext(addressView, serviceProvider: null, items: null);
         var results = new List<ValidationResult>();
@@ -145,7 +145,7 @@ public class AddressService : IAddressService
         return null;
     }
 
-   public async Task<bool> EditAddressAsync(int id, AddressEditViewModel addressView)
+    public async Task<bool> EditAddressAsync(int id, AddressEditViewModel addressView)
     {
         var context = new ValidationContext(addressView, serviceProvider: null, items: null);
         var results = new List<ValidationResult>();
@@ -174,7 +174,7 @@ public class AddressService : IAddressService
 
         return false;
     }
-  public async Task<AddressDeleteViewModel> GetDeleteViewModelAsync(int id)
+    public async Task<AddressDeleteViewModel> GetDeleteViewModelAsync(int id)
     {
         var address = await _context.Address
             .Include(a => a.Client)
