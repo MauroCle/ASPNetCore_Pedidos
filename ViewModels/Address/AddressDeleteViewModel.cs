@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Examenes.Models;
 
 namespace Examenes.ViewModels;

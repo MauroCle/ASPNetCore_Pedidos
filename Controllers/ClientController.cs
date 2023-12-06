@@ -8,58 +8,53 @@ using Microsoft.EntityFrameworkCore;
 using Examenes.Data;
 using Examenes.Models;
 using Examenes.ViewModels;
+using Examenes.Services;
 
 namespace Examen.Controllers
 {
     public class ClientController : Controller
     {
-        private readonly YaPedidosContext _context;
+        private readonly IClientService _clientService;
 
-        public ClientController(YaPedidosContext context)
+        public ClientController(IClientService clientService)
         {
-            _context = context;
+            _clientService = clientService;
         }
 
         // GET: Client
         public async Task<IActionResult> Index(string NameFilter)
         {
-            var query = from Client in _context.Client select Client; //Genera un query de todo el menu
-
-            //TODO Filtro por varios campos
-            if(!string.IsNullOrEmpty(NameFilter)) //Si no trae valor name o no se especifica no entra en el if. Osea, trae todo el menu.
-            {
-                query = query.Where(x => x.FirstName.ToLower().Contains(NameFilter.ToLower())); //filtra la query anterior
-            }
-            var model = new ClientViewModel();
-            model.Clients = query.ToList();
-
-             return View(model);
+            var clients = await _clientService.GetAllClientsAsync(NameFilter);
+            var model = new ClientViewModel { Clients = clients };
+            return View(model);
         }
 
         // GET: Client/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Client == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var client = await _context.Client.FindAsync(id);
-           var addresses = await _context.Address.Where(m => m.ClientId == id).ToListAsync();
+            var client = await _clientService.GetClientByIdAsync(id.Value);
+            var addresses = await _clientService.GetAddressesByClientIdAsync(id.Value);
 
-            ClientDetailsViewModel clientView = new ClientDetailsViewModel(){
-                Id= client.Id,
+            if (client == null)
+            {
+                return NotFound();
+            }
+
+            var clientView = new ClientDetailsViewModel
+            {
+                Id = client.Id,
                 FirstName = client.FirstName,
                 LastName = client.LastName,
-                Email= client.Email,
+                Email = client.Email,
                 PhoneNumber = client.PhoneNumber,
                 Addresses = addresses
             };
-            if (client == null || addresses == null)
-            {
-                return NotFound();
-            }
-            //TODO en la vista, revisar para que se muestren las direcciones
+
             return View(clientView);
         }
 
@@ -72,38 +67,33 @@ namespace Examen.Controllers
         // POST: Client/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Email,PhoneNumber,City,Street,Number,Apartment,Notes,PostalCode")] ClientCreateViewModel clientView)
         {
-            ModelState.Remove("Orders"); //TODO ver que hago con esto, creo que vuela
+            ModelState.Remove("Orders");
             if (ModelState.IsValid)
             {
-
-                var client = new Client{
-                FirstName = clientView.FirstName,
-                LastName = clientView.LastName,
-                Email = clientView.Email,
-                PhoneNumber = clientView.PhoneNumber,
-                Orders = new List<Order>()
+                var client = new Client
+                {
+                    FirstName = clientView.FirstName,
+                    LastName = clientView.LastName,
+                    Email = clientView.Email,
+                    PhoneNumber = clientView.PhoneNumber,
+                    Orders = new List<Order>()
                 };
 
-
-                _context.Add(client);
-                await _context.SaveChangesAsync();
-
-                var address = new Address{
-                    City= clientView.City,
+                var address = new Address
+                {
+                    City = clientView.City,
                     Street = clientView.Street,
                     Number = clientView.Number,
                     Apartment = clientView.Apartment,
                     Notes = clientView.Notes,
                     PostalCode = clientView.PostalCode,
-                    ClientId = client.Id
                 };
-                
-               // await AddressController.Create(address); TODO esto tendria que ser trabajo del service.
 
+                await _clientService.CreateClientAsync(client, address);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -113,29 +103,29 @@ namespace Examen.Controllers
         // GET: Client/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-
-            if (id == null || _context.Client == null || id==0)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var client = await _context.Client.FindAsync(id);
-           var addresses = await _context.Address.Where(m => m.ClientId == id).ToListAsync();
+            var client = await _clientService.GetClientByIdAsync(id.Value);
+            var addresses = await _clientService.GetAddressesByClientIdAsync(id.Value);
 
-            if (client == null || addresses == null) 
+            if (client == null)
             {
                 return NotFound();
             }
-            
-            ClientDetailsViewModel clientView = new ClientDetailsViewModel(){
+
+            var clientView = new ClientDetailsViewModel
+            {
                 Id = client.Id,
                 FirstName = client.FirstName,
                 LastName = client.LastName,
-                Email= client.Email,
+                Email = client.Email,
                 PhoneNumber = client.PhoneNumber,
                 Addresses = addresses
             };
-            
+
             return View(clientView);
         }
 
@@ -146,7 +136,6 @@ namespace Examen.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,FirstName,LastName,Email,PhoneNumber")] ClientDetailsViewModel client)
         {
-            //TODO Aplicar el ViewModel
             if (id != client.Id)
             {
                 return NotFound();
@@ -154,22 +143,14 @@ namespace Examen.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(client);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ClientExists(client.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                var updatedClient = await _clientService.GetClientByIdAsync(client.Id);
+                updatedClient.FirstName = client.FirstName;
+                updatedClient.LastName = client.LastName;
+                updatedClient.Email = client.Email;
+                updatedClient.PhoneNumber = client.PhoneNumber;
+
+                await _clientService.UpdateClientAsync(updatedClient);
+
                 return RedirectToAction(nameof(Index));
             }
             return View(client);
@@ -178,26 +159,27 @@ namespace Examen.Controllers
         // GET: Client/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Client == null)
+            if (id == null)
             {
                 return NotFound();
             }
 
-            var client = await _context.Client.FindAsync(id);
-           var addresses = await _context.Address.Where(m => m.ClientId == id).ToListAsync();
+            var client = await _clientService.GetClientByIdAsync(id.Value);
+            var addresses = await _clientService.GetAddressesByClientIdAsync(id.Value);
 
-            ClientDeleteViewModel clientView = new ClientDeleteViewModel(){
+            if (client == null)
+            {
+                return NotFound();
+            }
+
+            var clientView = new ClientDeleteViewModel
+            {
                 FirstName = client.FirstName,
                 LastName = client.LastName,
-                Email= client.Email,
+                Email = client.Email,
                 PhoneNumber = client.PhoneNumber,
                 Addresses = addresses
             };
-
-            if (client == null||addresses ==null)
-            {
-                return NotFound();
-            }
 
             return View(clientView);
         }
@@ -207,30 +189,19 @@ namespace Examen.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            //TODO Testar que las direcciones asociadas al client se eliminen correctamente
-            if (_context.Client == null)
+            var success = await _clientService.DeleteClientAsync(id);
+
+            if (!success)
             {
-                return Problem("Entity set 'YaPedidosContext.Client'  is null.");
+                return NotFound();
             }
-            var client = await _context.Client.FindAsync(id);
-                var addresses = await _context.Address.Where(m => m.ClientId == id).ToListAsync();
-            if (client != null)
-            {   
-                foreach(var item in addresses)
-                {
-                    _context.Address.Remove(item);
-                }
-                _context.Client.Remove(client);
-                
-            }
-            
-            await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ClientExists(int id)
-        {
-          return (_context.Client?.Any(e => e.Id == id)).GetValueOrDefault();
-        }
+        // private bool ClientExists(int id)
+        // {
+        //   return (_context.Client?.Any(e => e.Id == id)).GetValueOrDefault();
+        // }
     }
 }

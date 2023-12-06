@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Examenes.Data;
+using Examenes.Services;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<YaPedidosContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("YaPedidosContext") ?? throw new InvalidOperationException("Connection string 'YaPedidosContext' not found.")));
@@ -8,7 +9,15 @@ builder.Services.AddDbContext<YaPedidosContext>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddScoped<IClientService, ClientService>();
+builder.Services.AddScoped<IAddressService, AddressService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+//builder.Services.AddScoped<IOrderService, OrderService>();
+
+
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

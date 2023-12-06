@@ -1,5 +1,6 @@
 using Examenes.ViewModels;
 
+namespace  Examenes.Services;
     public interface IProductService
     {
         Task<List<ProductViewModel>> GetProductsAsync(string nameFilter);
