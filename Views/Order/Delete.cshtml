@@ -55,7 +55,7 @@
         }
     </dl>
 
-    <form asp-action="Delete">
+    <form asp-action="Delete" onsubmit="return confirm('¿Estas seguro de eliminar esta orden?')">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>

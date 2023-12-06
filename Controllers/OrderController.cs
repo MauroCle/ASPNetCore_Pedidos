@@ -28,7 +28,8 @@ namespace Examen.Controllers
         // GET: Order
         public async Task<IActionResult> Index(string NameFilter)
         {
-            var model = await _orderService.GetOrdersAsync(NameFilter);
+            var orders = await _orderService.GetOrdersAsync(NameFilter);
+            var model = new OrderIndexViewModel { Orders = orders };
             return View(model);
         }
 

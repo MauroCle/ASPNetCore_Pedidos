@@ -18,7 +18,7 @@ public class AddressViewModel{
     public string? Notes { get; set; }
     [Display(Name = "Codigo postal")]
     public string PostalCode { get; set; } = null!;
-    [Display(Name = "Nombre cliente")]
+    [Display(Name = "Cliente")]
     public string ClientFirstName {get;set;} = null!;
     [Display(Name = "Apellido Cliente")]
     public string ClientLastName {get;set;} =null!;

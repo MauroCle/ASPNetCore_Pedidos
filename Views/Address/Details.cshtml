@@ -1,4 +1,4 @@
-@model Examenes.Models.Address
+@model Examenes.ViewModels.AddressViewModel;
 
 @{
     ViewData["Title"] = "Details";
@@ -47,10 +47,10 @@
             @Html.DisplayFor(model => model.PostalCode)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Client)
+            @Html.DisplayNameFor(model => model.ClientFirstName)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Client.Id)
+            @Html.DisplayFor(model => model.ClientFirstName) @Html.DisplayFor(model => model.ClientLastName)
         </dd>
     </dl>
 </div>

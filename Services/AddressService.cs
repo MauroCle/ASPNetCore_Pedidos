@@ -16,7 +16,34 @@ public class AddressService : IAddressService
     public async Task<List<AddressViewModel>> GetAddressesAsync()
     {
         var addresses = await _context.Address.Include(a => a.Client).ToListAsync();
+        
 
+        List<AddressViewModel> addressesView = addresses.Select(item => new AddressViewModel
+        {
+            Id = item.Id,
+            City = item.City,
+            Street = item.Street,
+            Number = item.Number,
+            Apartment = item.Apartment,
+            Notes = item.Notes,
+            PostalCode = item.PostalCode,
+            ClientFirstName = item.Client.FirstName,
+            ClientLastName = item.Client.LastName,
+        }).ToList();
+
+        return addressesView;
+    }
+        public async Task<List<AddressViewModel>> GetAddressesAsync(string filter)
+    {
+        var addresses = await _context.Address.Include(a => a.Client).ToListAsync();
+        
+            if (!string.IsNullOrEmpty(filter))
+            {
+                addresses = addresses.Where(x => x.City.ToLower().Contains(filter.ToLower()) ||
+                                         x.Street.ToLower().Contains(filter.ToLower()) ||
+                                         x.Number.ToString().ToLower().Contains(filter.ToLower())||
+                                         x.PostalCode.ToLower().Contains(filter.ToLower())).ToList();
+            }
         List<AddressViewModel> addressesView = addresses.Select(item => new AddressViewModel
         {
             Id = item.Id,

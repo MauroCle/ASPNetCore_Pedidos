@@ -28,10 +28,11 @@ namespace Examen.Controllers
         }
 
         // GET: Address
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string filter)
         {
-            var addressesView = await _addressService.GetAddressesAsync();
-            return View(addressesView);
+            var addressesView = await _addressService.GetAddressesAsync(filter);
+            var model = new AddressIndexViewModel { Addresses = addressesView };
+            return View(model);
         }
 
 
