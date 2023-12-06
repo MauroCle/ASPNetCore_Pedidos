@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "h:\\Herramientas de Programacion Segunda Cursada\\Examen\\Examen.csproj": {}
+    "H:\\Herramientas de Programacion Segunda Cursada\\Examen\\Examen.csproj": {}
   },
   "projects": {
-    "h:\\Herramientas de Programacion Segunda Cursada\\Examen\\Examen.csproj": {
+    "H:\\Herramientas de Programacion Segunda Cursada\\Examen\\Examen.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "h:\\Herramientas de Programacion Segunda Cursada\\Examen\\Examen.csproj",
+        "projectUniqueName": "H:\\Herramientas de Programacion Segunda Cursada\\Examen\\Examen.csproj",
         "projectName": "Examen",
-        "projectPath": "h:\\Herramientas de Programacion Segunda Cursada\\Examen\\Examen.csproj",
+        "projectPath": "H:\\Herramientas de Programacion Segunda Cursada\\Examen\\Examen.csproj",
         "packagesPath": "C:\\Users\\Mauro\\.nuget\\packages\\",
-        "outputPath": "h:\\Herramientas de Programacion Segunda Cursada\\Examen\\obj\\",
+        "outputPath": "H:\\Herramientas de Programacion Segunda Cursada\\Examen\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Mauro\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -39,48 +39,17 @@
       "frameworks": {
         "net7.0": {
           "targetAlias": "net7.0",
-          "dependencies": {
-            "Microsoft.EntityFrameworkCore.Design": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[7.0.13, )"
-            },
-            "Microsoft.EntityFrameworkCore.SQLite": {
-              "target": "Package",
-              "version": "[7.0.13, )"
-            },
-            "Microsoft.EntityFrameworkCore.Tools": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[7.0.13, )"
-            },
-            "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
-              "target": "Package",
-              "version": "[7.0.11, )"
-            }
-          },
           "imports": [
             "net461",
             "net462",
             "net47",
             "net471",
             "net472",
-            "net48",
-            "net481"
+            "net48"
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "frameworkReferences": {
-            "Microsoft.AspNetCore.App": {
-              "privateAssets": "none"
-            },
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.301\\RuntimeIdentifierGraph.json"
         }
       }
     }

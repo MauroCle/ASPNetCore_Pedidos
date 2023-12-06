@@ -10,7 +10,8 @@ public class Product
     [Display(Name="Descripción")]
     public string Description { get; set; }
     [Display(Name="Precio")]
-    public int Price { get; set; }
+    public float Price { get; set; }
+     [Display(Name="Precio")]
     public int Stock {get;set;}
 
     // Muchos a muchos (N:N)

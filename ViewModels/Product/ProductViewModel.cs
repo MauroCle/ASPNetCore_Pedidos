@@ -11,7 +11,8 @@ public class ProductViewModel{
     [Display(Name="Descripción")]
     public string Description { get; set; }
     [Display(Name="Precio")]
-    public int Price { get; set; }
+    public float Price { get; set; }
+    [Display(Name="Stock")]
     public int Stock { get; set; }
 }
 
