@@ -12,7 +12,15 @@ public class AddressService : IAddressService
     {
         _context = context;
     }
+    public async Task<Address> GetAddressByIdAsync(int id){
 
+        var address = await _context.Address.Include(a => a.Client).Where(x => x.Id == id).FirstOrDefaultAsync();
+        
+        if(address != null)
+            return address;
+        else
+             return null;
+    }
     public async Task<List<AddressViewModel>> GetAddressesAsync()
     {
         var addresses = await _context.Address.Include(a => a.Client).ToListAsync();

@@ -5,6 +5,7 @@ namespace  Examenes.Services;
 
     public interface IAddressService
     {
+        Task<Address> GetAddressByIdAsync(int id);
         Task<List<AddressViewModel>> GetAddressesAsync();
         Task<List<AddressViewModel>> GetAddressesAsync(string filter);
         Task<AddressViewModel> GetAddressDetailsAsync(int id);

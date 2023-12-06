@@ -189,11 +189,23 @@ namespace Examen.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+           
+            var hasOrders = await _clientService.ClientHasOrdersAsync(id);
+            if (hasOrders)
+            {
+                ModelState.AddModelError(string.Empty, "No se puede eliminar clientes con pedidos asociados.");
+                ClientDeleteViewModel clientDelete = await _clientService.GetClientDeleteByIdAsync(id);
+
+                return View(clientDelete);
+            }
+
             var success = await _clientService.DeleteClientAsync(id);
 
             if (!success)
             {
-                return RedirectToAction(nameof(Index));
+                ClientDeleteViewModel clientDelete = await _clientService.GetClientDeleteByIdAsync(id);
+                
+                return View(clientDelete);
             }
 
             return RedirectToAction(nameof(Index));

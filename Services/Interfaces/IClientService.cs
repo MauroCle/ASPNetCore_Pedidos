@@ -1,4 +1,5 @@
 using Examenes.Models;
+using Examenes.ViewModels;
 
 namespace  Examenes.Services;
     public interface IClientService
@@ -11,5 +12,7 @@ namespace  Examenes.Services;
         Task<Client> CreateClientAsync(Client client, Address address);
         Task<Address> CreateAddressAsync(Address address);
         Task<bool> DeleteClientAsync(int id);
+        Task<bool> ClientHasOrdersAsync(int id);
         Task<Client> UpdateClientAsync(Client updatedClient);
+        Task<ClientDeleteViewModel> GetClientDeleteByIdAsync(int id);
     }

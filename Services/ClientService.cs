@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Examenes.Data;
 using Examenes.Models;
+using Examenes.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace Examenes.Services
@@ -97,11 +98,31 @@ namespace Examenes.Services
 
             return false;
         }
+
+        public async Task<bool> ClientHasOrdersAsync(int clientId)
+        {
+            return await _context.Order.AnyAsync(x => x.ClientId == clientId);
+        }
+
         public async Task<Client> UpdateClientAsync(Client updatedClient)
         {
             _context.Update(updatedClient);
             await _context.SaveChangesAsync();
             return updatedClient;
+        }
+        public async Task<ClientDeleteViewModel> GetClientDeleteByIdAsync(int id){
+            Client client = await GetClientByIdAsync(id);
+            Address address = await GetAddressByClientIdAsync(id);
+
+            ClientDeleteViewModel clientDelete = new ClientDeleteViewModel{
+                Id= client.Id,
+                FirstName= client.FirstName,
+                LastName= client.LastName,
+                Email= client.Email,
+                PhoneNumber= client.PhoneNumber,
+                Address= address
+            };
+            return clientDelete;
         }
     }
 }

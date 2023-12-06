@@ -60,9 +60,10 @@
                     <dd class="col-sm-10"><p>@Model.Address.PostalCode</p></dd>
                 </div>
             }
-        <div class="form-group row justify-content-around col-4">
-            <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary mt-3 col-4">Editar</a> 
-            <a asp-action="Index" class="btn btn-primary mt-3 col-4">Volver a la lista</a>
+        <div class="form-group row justify-content-around col-6">
+            <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary mt-3 col-3">Editar</a> 
+            <a type="button" asp-controller="Address" asp-action="Edit"asp-route-id="@Model?.Address.Id" class="btn btn-warning mt-3 col-3">Editar dirección</a>
+            <a asp-action="Index" class="btn btn-info mt-3 col-3">Volver a la lista</a>
         </div>
     </dlv>
 </div>

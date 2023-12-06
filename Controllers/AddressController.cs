@@ -157,19 +157,28 @@ namespace Examen.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (await _addressService.DeleteAddressAsync(id))
+
+            var address = await _addressService.GetAddressByIdAsync(id);
+
+
+            if (await _clientService.ClientHasOrdersAsync(address.ClientId))
             {
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError(string.Empty, "No se puede eliminar direcciones de clientes con pedidos asociados.");
+
+                return View(await _addressService.GetDeleteViewModelAsync(id));
             }
 
+            var success = await _addressService.DeleteAddressAsync(id);
 
-            return RedirectToAction(nameof(Delete), new { id = id, error = true });
+            if (!success)
+            { 
+                return View(await _addressService.GetDeleteViewModelAsync(id));
+            }
+
+            return RedirectToAction(nameof(Index));
 
         }
 
-        // private bool AddressExists(int id)
-        // {
-        //   return (_context.Address?.Any(e => e.Id == id)).GetValueOrDefault();
-        // }
+
     }
 }
