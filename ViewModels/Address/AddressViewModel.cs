@@ -5,12 +5,20 @@ namespace Examenes.ViewModels;
 public class AddressViewModel{
 
     public int Id {get;set;}
-    public string City {get; set;} = null!;
-    public string Street {get; set;} = null!;
-    public int Number {get; set;}
-    public string Apartment {get; set;} = null!;
-    public string? Notes {get; set;}
-    public string PostalCode {get; set;} = null!;
+    [Display(Name = "Ciudad")]
+    public string City { get; set; } = null!;
+    [Display(Name = "Calle")]
+    public string Street { get; set; } = null!;
+    [Display(Name = "Numero")]
+    public int Number { get; set; }
+    [Display(Name = "Departamento")]
+    public string Apartment { get; set; } = null!;
+    [Display(Name = "Notas")]
+    public string? Notes { get; set; }
+    [Display(Name = "Codigo postal")]
+    public string PostalCode { get; set; } = null!;
+    [Display(Name = "Nombre cliente")]
     public string ClientFirstName {get;set;} = null!;
+    [Display(Name = "Apellido Cliente")]
     public string ClientLastName {get;set;} =null!;
 }
