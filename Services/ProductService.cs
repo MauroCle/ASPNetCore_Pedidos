@@ -83,8 +83,7 @@ namespace Examenes.Services
 
             if (existingProduct == null)
             {
-                // TODO Manejar la situación donde el producto no existe
-                return;
+                return new InvalidOperationException("El producto no existe.");
             }
 
             _context.Entry(existingProduct).CurrentValues.SetValues(productViewModel);

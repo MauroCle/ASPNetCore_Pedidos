@@ -15,6 +15,6 @@ public class ClientDetailsViewModel{
     [Display(Name="Numero Telefonico")]
    public string PhoneNumber {get; set;} = null!;
    [Display(Name="Direcciones")]
-    public List<Address> Addresses {get; set;} = new List<Address>(); //TODO esto podria ser una lista de AddressDetailViewModel
+    public List<Address> Addresses {get; set;} = new List<Address>(); 
 
 }

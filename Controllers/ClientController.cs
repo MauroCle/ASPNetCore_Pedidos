@@ -34,7 +34,7 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             var client = await _clientService.GetClientByIdAsync(id.Value);
@@ -42,7 +42,7 @@ namespace Examen.Controllers
 
             if (client == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             var clientView = new ClientDetailsViewModel
@@ -105,7 +105,7 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             var client = await _clientService.GetClientByIdAsync(id.Value);
@@ -113,7 +113,7 @@ namespace Examen.Controllers
 
             if (client == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             var clientView = new ClientDetailsViewModel
@@ -138,7 +138,7 @@ namespace Examen.Controllers
         {
             if (id != client.Id)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             if (ModelState.IsValid)
@@ -161,7 +161,7 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             var client = await _clientService.GetClientByIdAsync(id.Value);
@@ -169,7 +169,7 @@ namespace Examen.Controllers
 
             if (client == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             var clientView = new ClientDeleteViewModel
@@ -193,7 +193,7 @@ namespace Examen.Controllers
 
             if (!success)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             return RedirectToAction(nameof(Index));

@@ -41,14 +41,14 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             var addressView = await _addressService.GetAddressDetailsAsync(id.Value);
 
             if (addressView == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             return View(addressView);
@@ -61,8 +61,7 @@ namespace Examen.Controllers
 
             if (addressView == null)
             {
-                // TODO Manejar el caso cuando no hay clientes disponibles
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             return View(addressView);
@@ -91,14 +90,14 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             var addressView = await _addressService.GetEditViewModelAsync(id.Value);
 
             if (addressView == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             return View(addressView);
@@ -126,14 +125,14 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             var addressView = await _addressService.GetDeleteViewModelAsync(id.Value);
 
             if (addressView == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             return View(addressView);
@@ -149,7 +148,7 @@ namespace Examen.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // Handle deletion errors
+
             return RedirectToAction(nameof(Delete), new { id = id, error = true });
 
         }

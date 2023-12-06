@@ -68,7 +68,6 @@ public class AddressService : IAddressService
 
         if (address == null)
         {
-            // TODO Manejar el caso cuando la dirección no se encuentra
             return null;
         }
 
@@ -104,7 +103,8 @@ public class AddressService : IAddressService
             return addressView;
         }
 
-        // TODO Manejar el caso cuando no hay clientes disponibles
+        // Manejar el caso cuando no hay clientes disponibles
+        // Al final no deberia pasar por la nueva logica de validaciones (a implementar, por cierto)
         return null;
     }
 
@@ -140,7 +140,6 @@ public class AddressService : IAddressService
 
         if (address == null)
         {
-            // TODO Manejar el caso cuando la dirección no se encuentra
             return null;
         }
 
@@ -168,7 +167,6 @@ public class AddressService : IAddressService
             return addressView;
         }
 
-        // TODO Manejar el caso cuando no hay clientes disponibles
         return null;
     }
 
@@ -209,7 +207,6 @@ public class AddressService : IAddressService
 
         if (address == null)
         {
-            // TODO Manejar el caso cuando la dirección no se encuentra
             return null;
         }
 
@@ -234,7 +231,6 @@ public class AddressService : IAddressService
 
         if (address == null)
         {
-            //  TODO Manejar el caso cuando la dirección no se encuentra
             return false;
         }
 
@@ -246,7 +242,6 @@ public class AddressService : IAddressService
         }
         catch (Exception)
         {
-            // TODO Manejar la excepción si ocurre algún problema al eliminar la dirección
             return false;
         }
     }

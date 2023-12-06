@@ -38,14 +38,14 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             var orderDetail = await _orderService.GetOrderDetailsAsync(id.Value);
 
             if (orderDetail == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             return View(orderDetail);
@@ -75,24 +75,20 @@ namespace Examen.Controllers
                 return RedirectToAction("Index");
             }
 
-            // TODO En caso de error o validación fallida
-            viewModel.Clients = new List<Client>(); // No es necesario cargar la lista de clientes aquí
-            viewModel.Products = new List<Product>(); // No es necesario cargar la lista de productos aquí
-
             return View(viewModel);
         }
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             var orderEdit = await _orderService.GetOrderEditViewModelAsync(id.Value);
 
             if (orderEdit == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             // ViewData["ClientId"] = new SelectList(orderEdit.Clients, "Id", "Id", orderEdit.ClientId);
@@ -108,7 +104,7 @@ namespace Examen.Controllers
         {
             if (id != orderView.Id)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             ModelState.Remove("Clients");
@@ -135,14 +131,14 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             var order = await _orderService.GetOrderDetailsAsync(id.Value);
 
             if (order == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             return View(order);

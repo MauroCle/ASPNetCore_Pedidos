@@ -36,14 +36,14 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             var productView = await _productService.GetProductAsync(id.Value);
 
             if (productView == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             return View(productView);
@@ -76,14 +76,14 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             var productView = await _productService.GetProductAsync(id.Value);
 
             if (productView == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             return View(productView);
@@ -98,13 +98,20 @@ namespace Examen.Controllers
         {
             if (id != productView.Id)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             if (ModelState.IsValid)
             {
-                await _productService.UpdateProductAsync(productView);
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    await _productService.UpdateProductAsync(productView);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch
+                {
+                    return RedirectToAction(nameof(Index));
+                }
             }
             return View(productView);
         }
@@ -114,14 +121,14 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             var productView = await _productService.GetProductAsync(id.Value);
 
             if (productView == null)
             {
-                return NotFound();
+                return RedirectToAction(nameof(Index));
             }
 
             return View(productView);
