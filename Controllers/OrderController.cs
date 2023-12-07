@@ -71,7 +71,8 @@ namespace Examen.Controllers
             var result = await _orderService.CreateOrderAsync(viewModel);
 
             if (result)
-            {
+            {   
+                _productService.ReduceStockProducts(viewModel.ProductIds);
                 return RedirectToAction("Index");
             }
 

@@ -137,5 +137,21 @@ namespace Examenes.Services
             return errorMessage;
         }
 
+        public async Task ReduceStockProducts(List<int> productsId){
+            
+            if(productsId.Any())
+            foreach(var item in productsId)
+            {
+                ProductViewModel product = await GetProductAsync(item);
+                if(product != null)
+                {
+                    product.Stock = product.Stock-1; 
+                    //TODO de moment solo baja una unidad, quiero ver si llego a hacer algo un poco mas completo
+
+                    UpdateProductAsync(product);
+                }
+            }
+        }
+
     }
 }
