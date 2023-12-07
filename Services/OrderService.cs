@@ -68,6 +68,15 @@ using Examenes.Services;
 
         return orderDetail;
     }
+    public async Task<List<Order>> GetOrdersWithProductsAsync(){
+        
+        List<Order> orders = await _context.Order.Include(o => o.Products).ToListAsync();
+
+        if (orders == null)
+            return orders = new List<Order>();
+        else
+            return orders;
+    }
     public async Task<bool> CreateOrderAsync(OrderCreateViewModel viewModel)
     {
         var clientsList = await _context.Client.Include(x=> x.Address).ToListAsync();

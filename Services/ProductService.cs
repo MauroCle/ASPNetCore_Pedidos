@@ -62,7 +62,10 @@ namespace Examenes.Services
                 }
                 : null;
         }
-
+        public async Task<Product> GetProductModelAsync(int id)
+        {
+            return await _context.Product.FindAsync(id);
+        }
         public async Task CreateProductAsync(ProductViewModel productViewModel)
         {
             var product = new Product
@@ -101,6 +104,16 @@ namespace Examenes.Services
                 _context.Product.Remove(product);
                 await _context.SaveChangesAsync();
             }
+        }
+        public async Task<bool> DeleteValidation(int id, List<Order> orders)
+        {
+            foreach(var item in orders)
+            {
+                if(item.Products.Contains(await GetProductModelAsync(id))){
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

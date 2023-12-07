@@ -7,7 +7,9 @@ namespace  Examenes.Services;
         Task<List<ProductViewModel>> GetProductsAsync(string nameFilter);
         Task<List<Product>> GetAvalibleProductsAsync();
         Task<ProductViewModel> GetProductAsync(int id);
+        Task<Product> GetProductModelAsync(int id);
         Task CreateProductAsync(ProductViewModel productViewModel);
         Task UpdateProductAsync(ProductViewModel productViewModel);
         Task DeleteProductAsync(int id);
+        Task<bool> DeleteValidation(int id, List<Order> orders);
     }

@@ -15,9 +15,11 @@ namespace Examen.Controllers
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
+        private readonly IOrderService _orderService;
 
-        public ProductController(IProductService productService)
+        public ProductController(IOrderService orderService, IProductService productService)
         {
+            _orderService = orderService;
             _productService = productService;
         }
 
@@ -139,8 +141,26 @@ namespace Examen.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _productService.DeleteProductAsync(id);
-            return RedirectToAction(nameof(Index));
+            List<Order> orders = await _orderService.GetOrdersWithProductsAsync();
+
+            if(orders == null || !orders.Any())
+            {
+                await _productService.DeleteProductAsync(id);
+                return RedirectToAction(nameof(Index));
+            }
+
+
+            if(await _productService.DeleteValidation(id, orders)){
+
+                await _productService.DeleteProductAsync(id);
+                return RedirectToAction(nameof(Index));
+
+            }else{
+
+                ModelState.AddModelError(string.Empty, "No se puede eliminar un producto con pedidos asociados.");
+                ProductViewModel productDelete = await _productService.GetProductAsync(id);
+                return View(productDelete);
+            }
         }
 
         // private bool ProductExists(int id)
