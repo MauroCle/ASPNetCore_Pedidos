@@ -12,4 +12,5 @@ namespace  Examenes.Services;
         Task UpdateProductAsync(ProductViewModel productViewModel);
         Task DeleteProductAsync(int id);
         Task<bool> DeleteValidation(int id, List<Order> orders);
+        Task<string?> CreateEditValidation(ProductViewModel productView);
     }

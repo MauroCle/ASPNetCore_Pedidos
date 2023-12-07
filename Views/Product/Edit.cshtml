@@ -4,14 +4,25 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>Product</h4>
+<h1>Editar producto</h1>
 <hr />
+@if (ViewData.ModelState.Any(m => m.Value.Errors.Any()))
+{
+    <div class="alert alert-danger" role="alert">
+        
+            @foreach (var key in ViewData.ModelState.Keys)
+            {
+                foreach (var error in ViewData.ModelState[key].Errors)
+                {
+                    @Html.Raw(@error.ErrorMessage)
+                }
+            }
+
+    </div>
+}
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>

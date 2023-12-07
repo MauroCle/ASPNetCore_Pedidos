@@ -67,6 +67,14 @@ namespace Examen.Controllers
         {
             if (ModelState.IsValid)
             {
+                string error = await _productService.CreateEditValidation(productView);
+
+                if(!string.IsNullOrEmpty(error))
+                {
+                    ModelState.AddModelError(string.Empty,error);
+                    return View(productView);
+                }
+
                 await _productService.CreateProductAsync(productView);
                 return RedirectToAction(nameof(Index));
             }
@@ -105,6 +113,14 @@ namespace Examen.Controllers
 
             if (ModelState.IsValid)
             {
+                string error = await _productService.CreateEditValidation(productView);
+
+                if(!string.IsNullOrEmpty(error))
+                {
+                    ModelState.AddModelError(string.Empty,error);
+                    return View(productView);
+                }
+                
                 try
                 {
                     await _productService.UpdateProductAsync(productView);
@@ -112,7 +128,7 @@ namespace Examen.Controllers
                 }
                 catch
                 {
-                    return RedirectToAction(nameof(Index));
+                    return View(productView);
                 }
             }
             return View(productView);

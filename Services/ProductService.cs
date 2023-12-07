@@ -115,5 +115,27 @@ namespace Examenes.Services
             }
             return true;
         }
+        public async Task<string?> CreateEditValidation(ProductViewModel productView)
+        {
+            string errorMessage = null;
+            if(productView.Price <= 0)
+            {
+                if(!string.IsNullOrEmpty(errorMessage))
+                    errorMessage += "<br/>";
+                    
+                errorMessage += "El precio debe ser mayor a 0.";
+            }
+
+            if( productView.Stock < 0)
+            {
+                if(!string.IsNullOrEmpty(errorMessage))
+                    errorMessage += "<br/>";
+
+                errorMessage += "El stock debe ser igual o mayor a 0.";
+            }
+
+            return errorMessage;
+        }
+
     }
 }
