@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Examenes.Models;
 using Microsoft.AspNetCore.Identity;
 using Examenes.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Clase11.Controllers;
 
+[Authorize(Roles = "Administrador")]
 public class RolesController :Controller{
     private readonly ILogger<RolesController> _logger;
 

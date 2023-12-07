@@ -11,13 +11,13 @@
     <div class="alert alert-danger" role="alert">
         <strong>Error:</strong> 
         
-            @foreach (var key in ViewData.ModelState.Keys)
+        @foreach (var key in ViewData.ModelState.Keys)
+        {
+            foreach (var error in ViewData.ModelState[key].Errors)
             {
-                foreach (var error in ViewData.ModelState[key].Errors)
-                {
-                    @error.ErrorMessage
-                }
+                @error.ErrorMessage
             }
+        }
 
     </div>
 }

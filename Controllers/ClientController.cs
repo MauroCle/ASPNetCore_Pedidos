@@ -9,9 +9,11 @@ using Examenes.Data;
 using Examenes.Models;
 using Examenes.ViewModels;
 using Examenes.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Examen.Controllers
 {
+    [Authorize(Roles = "Administrador,Comercial")]
     public class ClientController : Controller
     {
         private readonly IClientService _clientService;
@@ -34,7 +36,7 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return RedirectToAction(nameof(Index));
+               return NotFound(); 
             }
 
             var client = await _clientService.GetClientByIdAsync(id.Value);
@@ -42,7 +44,7 @@ namespace Examen.Controllers
 
             if (client == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound(); 
             }
 
             var clientView = new ClientDetailsViewModel
@@ -105,7 +107,7 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return RedirectToAction(nameof(Index));
+               return NotFound(); 
             }
 
             var client = await _clientService.GetClientByIdAsync(id.Value);
@@ -113,7 +115,7 @@ namespace Examen.Controllers
 
             if (client == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound(); 
             }
 
             var clientView = new ClientDetailsViewModel
@@ -161,7 +163,7 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound(); 
             }
 
             var client = await _clientService.GetClientByIdAsync(id.Value);
@@ -169,7 +171,7 @@ namespace Examen.Controllers
 
             if (client == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound(); 
             }
 
             var clientView = new ClientDeleteViewModel

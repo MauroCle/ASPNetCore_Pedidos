@@ -9,9 +9,11 @@ using Examenes.Data;
 using Examenes.Models;
 using Examenes.ViewModels;
 using Examenes.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Examen.Controllers
-{
+{    
+    [Authorize(Roles = "Administrador,Comercial")]
     public class OrderController : Controller
     {
         private readonly IOrderService _orderService;
@@ -38,14 +40,14 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound(); 
             }
 
             var orderDetail = await _orderService.GetOrderDetailsAsync(id.Value);
 
             if (orderDetail == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound(); 
             }
 
             return View(orderDetail);
@@ -60,6 +62,7 @@ namespace Examen.Controllers
                 Products = await _productService.GetAvalibleProductsAsync() 
             };
 
+            ViewData["clients"] = await _clientService.GetAllClientsAsync("");
             return View(viewModel);
         }
 
@@ -68,6 +71,18 @@ namespace Examen.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(OrderCreateViewModel viewModel)
         {
+
+            var clientsWithoutAddress = await _clientService.GetClientsWithoutAddressAsync();
+
+            foreach(var item in clientsWithoutAddress)
+            {   
+                if(viewModel.ClientId == item.Id)
+                {
+                    ModelState.AddModelError(string.Empty, "El cliente debe tener una dirección asociada.");
+                    
+                    return View(viewModel);                      
+                }
+            }
             var result = await _orderService.CreateOrderAsync(viewModel);
 
             if (result)
@@ -82,18 +97,18 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound(); 
             }
 
             var orderEdit = await _orderService.GetOrderEditViewModelAsync(id.Value);
 
             if (orderEdit == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound(); 
             }
 
-            // ViewData["ClientId"] = new SelectList(orderEdit.Clients, "Id", "Id", orderEdit.ClientId);
-            // ViewData["AddressId"] = new SelectList(_context.Address, "Id", "Id", orderEdit.AddressId);
+             ViewData["clients"] = _clientService.GetAllClientsAsync("");
+             ViewData["products"] = _productService.GetAvalibleProductsAsync();
 
             return View(orderEdit);
         }
@@ -121,9 +136,6 @@ namespace Examen.Controllers
                 }
             }
 
-            // ViewData["ClientId"] = new SelectList(orderView.Clients, "Id", "Id", orderView.ClientId);
-            // ViewData["AddressId"] = new SelectList(_context.Address, "Id", "Id", orderView.AddressId);
-
             return View(orderView);
         }
 
@@ -132,14 +144,14 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound(); 
             }
 
             var order = await _orderService.GetOrderDetailsAsync(id.Value);
 
             if (order == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound(); 
             }
 
             return View(order);

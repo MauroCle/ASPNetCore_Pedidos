@@ -4,9 +4,11 @@ using Examenes.Models;
 using Microsoft.AspNetCore.Identity;
 using Examenes.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Examenes.Controllers;
 
+[Authorize(Roles = "Administrador")]
 public class UsersController :Controller{
 
     private readonly UserManager<IdentityUser> _userManager;
@@ -31,6 +33,11 @@ public class UsersController :Controller{
     //Edit Usuairos
     public async Task<IActionResult> Edit(string Id)
     {
+        if(string.IsNullOrEmpty(Id))
+        {
+            return NotFound();
+        }
+
         var user = await _userManager.FindByIdAsync(Id);
        // ViewData["Roles"] = _roleManager.Roles.Select(x=> x.UserName).ToList();
          var userViewModel = new UserEditViewModel();
@@ -44,9 +51,11 @@ public class UsersController :Controller{
       public async Task<IActionResult> Edit(UserEditViewModel model)
       {
         var user = await _userManager.FindByNameAsync(model.UserName);
-         //Se puede usar AddToRoleAsync() para agregar varios roles de un saque con uan lista sttring
+         
         if(user == null)
-        return RedirectToAction("Index");
+        {
+            return NotFound();
+        }
 
         await _userManager.AddToRoleAsync(user,model.Role);
         return RedirectToAction("Index");

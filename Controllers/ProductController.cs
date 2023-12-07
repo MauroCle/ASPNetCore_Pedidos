@@ -9,9 +9,12 @@ using Examenes.Data;
 using Examenes.Models;
 using Examenes.ViewModels;
 using Examenes.Services;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace Examen.Controllers
 {
+    [Authorize(Roles = "Administrador,Deposito")]
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
@@ -38,14 +41,14 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound(); 
             }
 
             var productView = await _productService.GetProductAsync(id.Value);
 
             if (productView == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound(); 
             }
 
             return View(productView);
@@ -86,14 +89,14 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound(); 
             }
 
             var productView = await _productService.GetProductAsync(id.Value);
 
             if (productView == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound(); 
             }
 
             return View(productView);
@@ -108,7 +111,7 @@ namespace Examen.Controllers
         {
             if (id != productView.Id)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound(); 
             }
 
             if (ModelState.IsValid)
@@ -139,14 +142,14 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound(); 
             }
 
             var productView = await _productService.GetProductAsync(id.Value);
 
             if (productView == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound(); 
             }
 
             return View(productView);

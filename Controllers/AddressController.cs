@@ -9,9 +9,11 @@ using Examenes.Data;
 using Examenes.Models;
 using Examenes.ViewModels;
 using Examenes.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Examen.Controllers
 {
+    [Authorize(Roles = "Administrador,Comercial")]
     public class AddressController : Controller
     {
         // private readonly YaPedidosContext _context;
@@ -43,14 +45,14 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound(); 
             }
 
             var addressView = await _addressService.GetAddressDetailsAsync(id.Value);
 
             if (addressView == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound(); 
             }
 
             return View(addressView);
@@ -96,7 +98,7 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound(); 
             }
             var clientsWithoutAddress = await _clientService.GetClientsWithoutAddressAsync();
             
@@ -104,7 +106,7 @@ namespace Examen.Controllers
 
             if (addressView == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound(); 
             }
 
             if(clientsWithoutAddress != null && clientsWithoutAddress.Any())
@@ -139,14 +141,14 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return RedirectToAction(nameof(Index));
+                return NotFound(); 
             }
 
             var addressView = await _addressService.GetDeleteViewModelAsync(id.Value);
 
             if (addressView == null)
             {
-                return RedirectToAction(nameof(Index));
+               return NotFound(); 
             }
 
             return View(addressView);

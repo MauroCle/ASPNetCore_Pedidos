@@ -1,18 +1,30 @@
 @using Examenes.ViewModels;
 @model RoleCreateViewModel
+@if(User.Identity != null && User.Identity.IsAuthenticated){
 
-<form asp-action="Create" method="post">
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <div class="form-group">
-        <label asp-for="RoleName" class="control-label"></label> <!--Estas 3 lineas labe, input y span junto al submit son las importantes(dentro del formulario)-->
-        <input asp-for="RoleName" class="form-control"/>
-        <span asp-validation-for="RoleName" class="text-danger"></span>
-    </div>
-    <div class="form-group mt-3">
-        <input type="submit" value="Crear" class="btn btn-primary">
-    </div>
-</form>
+    @if(User.IsInRole("Administrador")){
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="RoleName" class="control-label"></label> <!--Estas 3 lineas labe, input y span junto al submit son las importantes(dentro del formulario)-->
+                <input asp-for="RoleName" class="form-control"/>
+                <span asp-validation-for="RoleName" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-3">
+                <input type="submit" value="Crear" class="btn btn-primary">
+            </div>
+        </form>
 
-<div>
-    <a asp-action="Index">Volver a la lista</a>
-</div>
+        <div>
+            <a asp-action="Index">Volver a la lista</a>
+        </div>
+    }else{
+    <div class="alert alert-danger" style="margin-top:5%">
+        <p class="text-center m-auto">No tiene permisos para acceder a esta seccion.</p>
+    </div>
+    }
+}else{
+  <div class="alert alert-danger" style="margin-top:5%">
+    <p class="text-center m-auto">Debe registrarse para poder acceder a las funcionalidades de esta pagina web.</p>
+  </div>
+}
