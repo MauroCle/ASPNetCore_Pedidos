@@ -2,11 +2,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Examenes.Data;
 using Examenes.Services;
+using Microsoft.AspNetCore.Identity;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<YaPedidosContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("YaPedidosContext") ?? throw new InvalidOperationException("Connection string 'YaPedidosContext' not found.")));
 
 // Add services to the container.
+builder.Services.AddDefaultIdentity<IdentityUser>() //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddRoles<IdentityRole>()  //Se agrega para poder hacer el manejo de roles
+    .AddEntityFrameworkStores<YaPedidosContext>();
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddScoped<IClientService, ClientService>();
@@ -38,5 +44,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
+    
+app.MapRazorPages();
 app.Run();

@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Examenes.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace Examenes.Data
 {
-    public class YaPedidosContext : DbContext
+    public class YaPedidosContext : IdentityDbContext
     {
         public YaPedidosContext (DbContextOptions<YaPedidosContext> options)
             : base(options)
@@ -48,6 +50,7 @@ namespace Examenes.Data
             .WithMany(p => p.Orders)
             .UsingEntity(j => j.ToTable("OrderProduct"));
 
+        base.OnModelCreating(modelBuilder);
     //En realidad esto ya está arriba, creo que ahi está el problema.
     //     // Configuración de relaciones uno a uno (1:1) entre Address y Client
     //     modelBuilder.Entity<Address>()
