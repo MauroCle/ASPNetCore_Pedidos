@@ -13,4 +13,5 @@ public interface IOrderService
     Task<bool> EditOrderAsync(int id, OrderEditViewModel orderView);
     Task<Order> GetOrderAsync(int id);
     Task<bool> DeleteOrderAsync(int id);
+    Task<bool> EditOrderWithoutProductsAsync(int id, OrderEditViewModel orderView);
 }

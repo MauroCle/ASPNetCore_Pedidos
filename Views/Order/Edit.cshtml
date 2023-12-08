@@ -29,15 +29,28 @@
                 <span asp-validation-for="ClientId" class="text-danger"></span>
             </div>
             <label asp-for="Products" class="control-label"></label>
-            <div class="form-group">
-                <select class="form-select valid" multiple asp-for="ProductIds" name="ProductIds" style="width: 100%;">
-                    @foreach (var product in Model.Products)
-                    {
-                        <option value="@product.Id">@product.Name - @product.Description</option>
-                    }
-                </select>
-                <span asp-validation-for="ProductIds" class="text-danger"></span>
-            </div>
+              <table class="table text-center">
+                <thead>
+                    <tr>
+                        <th><label asp-for="Products"></label></th>
+                        <th><label asp-for="ProductStockDictionary"></label></th>
+                        <th>Agregar cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+            @foreach (var item in Model.Products)
+                {
+                    <tr>
+                        <div class="row mt-3 alin">
+                        <td class="col-6"><p class="m-none">@item.Name - @item.Description</p></td>
+                        <td class="col-4"><p>@item.Stock</p></td>
+                        <td class="col-1"><input class="text-center" type="number" name="ProductStockDictionary[@item.Id]" value="0" max="@item.Stock"/></td>
+                        </div>
+                    </tr>
+                }
+                </tbody>
+            </table>
 
             <div class="form-group row justify-content-around col-12">
                 <input type="submit" value="Guardar" class="btn btn-success mt-3 col-4"></input> 

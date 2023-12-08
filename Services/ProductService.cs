@@ -5,6 +5,7 @@ using System.Linq;
 using System.ComponentModel.DataAnnotations;
 using Examenes.ViewModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 
 namespace Examenes.Services
@@ -137,21 +138,45 @@ namespace Examenes.Services
             return errorMessage;
         }
 
-        public async Task ReduceStockProducts(List<int> productsId){
+        public async Task ReduceStockProducts(Dictionary<int,int> ReduceStockProducts){
             
-            if(productsId.Any())
-            foreach(var item in productsId)
+            if(ReduceStockProducts.Any())
+            foreach(var item in ReduceStockProducts)
             {
-                ProductViewModel product = await GetProductAsync(item);
+                ProductViewModel product = await GetProductAsync(item.Key);
                 if(product != null)
                 {
-                    product.Stock = product.Stock-1; 
-                    //TODO de moment solo baja una unidad, quiero ver si llego a hacer algo un poco mas completo
+                    product.Stock = product.Stock- item.Value; 
 
                     UpdateProductAsync(product);
                 }
             }
         }
+
+        public async Task DecreaseStockProduct(int idProduct, int stock){
+            
+
+            ProductViewModel product = await GetProductAsync(idProduct);
+            if(product != null)
+            {
+                product.Stock = product.Stock - stock; 
+
+                UpdateProductAsync(product);
+            }
+        }
+    
+        public async Task IncreaseStockProduct(int idProduct, int stock){
+        
+
+            ProductViewModel product = await GetProductAsync(idProduct);
+            if(product != null)
+            {
+                product.Stock = product.Stock + stock; 
+
+                UpdateProductAsync(product);
+            }
+        }
+        
 
     }
 }

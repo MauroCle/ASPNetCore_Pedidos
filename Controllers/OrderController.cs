@@ -10,6 +10,7 @@ using Examenes.Models;
 using Examenes.ViewModels;
 using Examenes.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.View;
 
 namespace Examen.Controllers
 {    
@@ -71,23 +72,37 @@ namespace Examen.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(OrderCreateViewModel viewModel)
         {
-
             var clientsWithoutAddress = await _clientService.GetClientsWithoutAddressAsync();
+
+            var newViewModel = new OrderCreateViewModel
+            {
+                OrderDate = DateTime.Today,
+                Clients = await _clientService.GetAllClientsAsync(""), 
+                Products = await _productService.GetAvalibleProductsAsync() 
+            };
 
             foreach(var item in clientsWithoutAddress)
             {   
                 if(viewModel.ClientId == item.Id)
                 {
                     ModelState.AddModelError(string.Empty, "El cliente debe tener una dirección asociada.");
-                    
-                    return View(viewModel);                      
+                    return View(newViewModel);
+                   
                 }
             }
+
+            if(!viewModel.ProductStockDictionary.Values.Any(x => x > 0))
+            {
+                ModelState.AddModelError(string.Empty, "Debe ingresar cantidades para almenos un producto.");
+                    
+                return View(newViewModel);
+            }
+
             var result = await _orderService.CreateOrderAsync(viewModel);
 
             if (result)
             {   
-                _productService.ReduceStockProducts(viewModel.ProductIds);
+                _productService.ReduceStockProducts(viewModel.ProductStockDictionary);
                 return RedirectToAction("Index");
             }
 
@@ -99,7 +114,7 @@ namespace Examen.Controllers
             {
                 return NotFound(); 
             }
-
+            
             var orderEdit = await _orderService.GetOrderEditViewModelAsync(id.Value);
 
             if (orderEdit == null)
@@ -107,8 +122,8 @@ namespace Examen.Controllers
                 return NotFound(); 
             }
 
-             ViewData["clients"] = _clientService.GetAllClientsAsync("");
-             ViewData["products"] = _productService.GetAvalibleProductsAsync();
+            //  ViewData["clients"] = _clientService.GetAllClientsAsync("");
+            //  ViewData["products"] = _productService.GetAvalibleProductsAsync();
 
             return View(orderEdit);
         }
@@ -116,27 +131,36 @@ namespace Examen.Controllers
         // POST: Order/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,OrderDate,ProductIds,ClientId,Clients,Products")] OrderEditViewModel orderView)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,OrderDate,ProductIds,ClientId,Clients,Products,ProductStockDictionary")] OrderEditViewModel orderView)
         {
+
+            var newViewModel = await _orderService.GetOrderEditViewModelAsync(id);
+
             if (id != orderView.Id)
             {
                 return RedirectToAction(nameof(Index));
             }
 
-            ModelState.Remove("Clients");
-            ModelState.Remove("Products");
-
-            if (ModelState.IsValid)
+            if(!orderView.ProductStockDictionary.Values.Any(x => x > 0))
             {
-                var result = await _orderService.EditOrderAsync(id, orderView);
+                await _orderService.EditOrderWithoutProductsAsync(id, orderView);
+                    
+                return RedirectToAction(nameof(Index));
+            }
+            
 
-                if (result)
-                {
-                    return RedirectToAction(nameof(Index));
-                }
+ 
+            var result = await _orderService.EditOrderAsync(id, orderView);
+
+            if (result)
+            {
+                return RedirectToAction(nameof(Index));
             }
 
-            return View(orderView);
+
+          
+
+            return View(newViewModel);
         }
 
         // GET: Order/Delete/5

@@ -13,9 +13,11 @@ public class OrderEditViewModel{
     [Display(Name="Cliente")]
     public int ClientId { get; set; }
      [Display(Name="Clientes")]
-   public List<Client> Clients { get; set; }
+   public List<Client>? Clients { get; set; }
     [Display(Name="Productos")]
-   public List<Product> Products { get; set; }
+   public List<Product>? Products { get; set; }
+    [Display(Name="Stock Disponible")]
+    public Dictionary<int, int> ProductStockDictionary { get; set; }
    
 }
 
