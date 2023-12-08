@@ -16,6 +16,7 @@ public class OrderEditViewModel{
    public List<Client> Clients { get; set; }
     [Display(Name="Productos")]
    public List<Product> Products { get; set; }
+    public Dictionary<int, int> ProductStockDictionary { get; set; }
    
 }
 

@@ -4,14 +4,16 @@ using Examenes.Models;
 using Examenes.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Examenes.Services;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-   public class OrderService : IOrderService
+public class OrderService : IOrderService
 {
     private readonly YaPedidosContext _context;
-
-    public OrderService(YaPedidosContext context)
+    private readonly IProductService _productService;
+    public OrderService(YaPedidosContext context, IProductService productService)
     {
         _context = context;
+        _productService = productService;
     }
 
     public async Task<List<OrderViewModel>> GetOrdersAsync(string nameFilter)
@@ -92,7 +94,7 @@ using Examenes.Services;
 
             if (clientOrder != null)
             {
-                foreach (var productId in viewModel.ProductIds)
+                foreach (var productId in viewModel.ProductStockDictionary.Keys)
                 {
                     var product = productsList.FirstOrDefault(x => x.Id == productId);
                     if (product != null)
@@ -107,7 +109,9 @@ using Examenes.Services;
                     AddressId = clientOrder.Address.Id,
                     ShippingAddress = clientOrder.Address,
                     Products = products,
-                    ClientId = clientOrder.Id
+                    ClientId = clientOrder.Id,
+                    ProductStockDictionary = viewModel.ProductStockDictionary
+                    
                 };
 
                 _context.Add(newOrder);
@@ -164,11 +168,39 @@ using Examenes.Services;
                 return false;
             }
 
+            if(order.ProductStockDictionary != orderView.ProductStockDictionary)
+            {
+                foreach(var item in orderView.ProductStockDictionary){
+                    if(!order.ProductStockDictionary.ContainsKey(item.Key))
+                    {
+                        _productService.DecreaseStockProduct(item.Key,item.Value);
+                    }
+                    else{
+                        if(item.Value > order.ProductStockDictionary[item.Key])
+                        {
+                            _productService.DecreaseStockProduct(item.Key,item.Value);
+                        }
+                        if(item.Value < order.ProductStockDictionary[item.Key])
+                        {
+                            _productService.IncreaseStockProduct(item.Key,item.Value);
+                        }
+                    }
+                }
+                foreach(var item in order.ProductStockDictionary){
+                    if(!orderView.ProductStockDictionary.ContainsKey(item.Key))
+                    {
+                        _productService.IncreaseStockProduct(item.Key,item.Value);
+                    }
+                }
+            }
+
             order.OrderDate = orderView.OrderDate;
             order.ClientId = orderView.ClientId;
             order.Client = await _context.Client.FirstOrDefaultAsync(x => x.Id == orderView.ClientId);
             order.ShippingAddress = await _context.Address.FirstOrDefaultAsync(x => x.ClientId == orderView.ClientId);
             order.Products = await _context.Product.Where(p => orderView.ProductIds.Contains(p.Id)).ToListAsync();
+            order.ProductStockDictionary = orderView.ProductStockDictionary;
+
 
             _context.Update(order);
             await _context.SaveChangesAsync();

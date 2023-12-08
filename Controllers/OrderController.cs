@@ -87,7 +87,7 @@ namespace Examen.Controllers
 
             if (result)
             {   
-                _productService.ReduceStockProducts(viewModel.ProductIds);
+                _productService.ReduceStockProducts(viewModel.ProductStockDictionary);
                 return RedirectToAction("Index");
             }
 
