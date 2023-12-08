@@ -85,11 +85,6 @@ public class OrderService : IOrderService
         var productsList = await _context.Product.ToListAsync();
         var products = new List<Product>();
 
-        var validationContext = new ValidationContext(viewModel, serviceProvider: null, items: null);
-        var validationResults = new List<ValidationResult>();
-
-        if (Validator.TryValidateObject(viewModel, validationContext, validationResults, validateAllProperties: true))
-        {
             var clientOrder = clientsList.FirstOrDefault(x => x.Id == viewModel.ClientId);
 
             if (clientOrder != null)
@@ -97,7 +92,7 @@ public class OrderService : IOrderService
                 foreach (var productId in viewModel.ProductStockDictionary.Keys)
                 {
                     var product = productsList.FirstOrDefault(x => x.Id == productId);
-                    if (product != null)
+                    if (product != null && viewModel.ProductStockDictionary[productId] >0)
                     {
                         products.Add(product);
                     }
@@ -118,7 +113,7 @@ public class OrderService : IOrderService
                 await _context.SaveChangesAsync();
                 return true;
             }
-        }
+        
 
         return false;
     }
@@ -168,29 +163,20 @@ public class OrderService : IOrderService
                 return false;
             }
 
+            foreach(var item in orderView.ProductStockDictionary)
+            {
+                if(item.Value >0){
+                    orderView.Products.Add( await _productService.GetProductModelAsync(item.Key));
+                }
+            }
+
             if(order.ProductStockDictionary != orderView.ProductStockDictionary)
             {
                 foreach(var item in orderView.ProductStockDictionary){
-                    if(!order.ProductStockDictionary.ContainsKey(item.Key))
-                    {
-                        _productService.DecreaseStockProduct(item.Key,item.Value);
-                    }
-                    else{
-                        if(item.Value > order.ProductStockDictionary[item.Key])
-                        {
-                            _productService.DecreaseStockProduct(item.Key,item.Value);
-                        }
-                        if(item.Value < order.ProductStockDictionary[item.Key])
-                        {
-                            _productService.IncreaseStockProduct(item.Key,item.Value);
-                        }
-                    }
-                }
-                foreach(var item in order.ProductStockDictionary){
-                    if(!orderView.ProductStockDictionary.ContainsKey(item.Key))
-                    {
-                        _productService.IncreaseStockProduct(item.Key,item.Value);
-                    }
+                    
+                   
+                    _productService.DecreaseStockProduct(item.Key,item.Value);
+                 
                 }
             }
 
@@ -198,10 +184,49 @@ public class OrderService : IOrderService
             order.ClientId = orderView.ClientId;
             order.Client = await _context.Client.FirstOrDefaultAsync(x => x.Id == orderView.ClientId);
             order.ShippingAddress = await _context.Address.FirstOrDefaultAsync(x => x.ClientId == orderView.ClientId);
-            order.Products = await _context.Product.Where(p => orderView.ProductIds.Contains(p.Id)).ToListAsync();
+            order.Products = orderView.Products;
             order.ProductStockDictionary = orderView.ProductStockDictionary;
 
 
+            _context.Update(order);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            return false;
+        }
+    }
+
+    return false;
+}   
+public async Task<bool> EditOrderWithoutProductsAsync(int id, OrderEditViewModel orderView)
+    {
+    var validationContext = new ValidationContext(orderView, serviceProvider: null, items: null);
+    var validationResults = new List<ValidationResult>();
+
+    if (Validator.TryValidateObject(orderView, validationContext, validationResults, validateAllProperties: true))
+    {
+        try
+        {
+            var order = await _context.Order
+                .Include(o => o.Products)
+                .Include(o => o.Client)
+                .Include(o => o.ShippingAddress)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (order == null)
+            {
+                return false;
+            }
+        
+
+            order.OrderDate = orderView.OrderDate;
+            order.ClientId = orderView.ClientId;
+            order.Client = await _context.Client.FirstOrDefaultAsync(x => x.Id == orderView.ClientId);
+            order.ShippingAddress = await _context.Address.FirstOrDefaultAsync(x => x.ClientId == orderView.ClientId);
+            
             _context.Update(order);
             await _context.SaveChangesAsync();
 
