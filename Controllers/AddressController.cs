@@ -25,7 +25,7 @@ namespace Examen.Controllers
         private readonly IAddressService _addressService;
         private readonly IClientService _clientService;
 
-        public AddressController(IAddressService addressService,IClientService clientService)
+        public AddressController(IAddressService addressService, IClientService clientService)
         {
             _addressService = addressService;
             _clientService = clientService;
@@ -45,14 +45,14 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
 
             var addressView = await _addressService.GetAddressDetailsAsync(id.Value);
 
             if (addressView == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
 
             return View(addressView);
@@ -63,10 +63,10 @@ namespace Examen.Controllers
         {
 
             var clientsWithoutAddress = await _clientService.GetClientsWithoutAddressAsync();
-            
+
 
             var addressView = await _addressService.GetCreateViewModelAsync(clientsWithoutAddress);
-            
+
             if (addressView == null)
             {
                 addressView = new AddressCreateViewModel(); // O inicializa según tus necesidades
@@ -98,21 +98,22 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
             var clientsWithoutAddress = await _clientService.GetClientsWithoutAddressAsync();
-            
+
             var addressView = await _addressService.GetEditViewModelAsync(id.Value);
 
             if (addressView == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
 
-            if(clientsWithoutAddress != null && clientsWithoutAddress.Any())
+            if (clientsWithoutAddress != null && clientsWithoutAddress.Any())
             {
-                foreach(var item in clientsWithoutAddress){
-                addressView.Clients.Add(item);
+                foreach (var item in clientsWithoutAddress)
+                {
+                    addressView.Clients.Add(item);
                 }
             }
 
@@ -141,14 +142,14 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
 
             var addressView = await _addressService.GetDeleteViewModelAsync(id.Value);
 
             if (addressView == null)
             {
-               return NotFound(); 
+                return NotFound();
             }
 
             return View(addressView);
@@ -173,7 +174,7 @@ namespace Examen.Controllers
             var success = await _addressService.DeleteAddressAsync(id);
 
             if (!success)
-            { 
+            {
                 return View(await _addressService.GetDeleteViewModelAsync(id));
             }
 

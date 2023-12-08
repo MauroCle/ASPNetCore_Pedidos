@@ -43,9 +43,9 @@ namespace Examenes.Services
 
         public async Task<List<Product>> GetAvalibleProductsAsync()
         {
-            var query = _context.Product.Where(x => x.Stock>0).AsQueryable();
+            var query = _context.Product.Where(x => x.Stock > 0).AsQueryable();
 
-            return  await query.ToListAsync(); 
+            return await query.ToListAsync();
         }
 
         public async Task<ProductViewModel?> GetProductAsync(int id)
@@ -108,9 +108,10 @@ namespace Examenes.Services
         }
         public async Task<bool> DeleteValidation(int id, List<Order> orders)
         {
-            foreach(var item in orders)
+            foreach (var item in orders)
             {
-                if(item.Products.Contains(await GetProductModelAsync(id))){
+                if (item.Products.Contains(await GetProductModelAsync(id)))
+                {
                     return false;
                 }
             }
@@ -119,17 +120,17 @@ namespace Examenes.Services
         public async Task<string?> CreateEditValidation(ProductViewModel productView)
         {
             string errorMessage = null;
-            if(productView.Price <= 0)
+            if (productView.Price <= 0)
             {
-                if(!string.IsNullOrEmpty(errorMessage))
+                if (!string.IsNullOrEmpty(errorMessage))
                     errorMessage += "<br/>";
-                    
+
                 errorMessage += "El precio debe ser mayor a 0.";
             }
 
-            if( productView.Stock < 0)
+            if (productView.Stock < 0)
             {
-                if(!string.IsNullOrEmpty(errorMessage))
+                if (!string.IsNullOrEmpty(errorMessage))
                     errorMessage += "<br/>";
 
                 errorMessage += "El stock debe ser igual o mayor a 0.";
@@ -138,45 +139,48 @@ namespace Examenes.Services
             return errorMessage;
         }
 
-        public async Task ReduceStockProducts(Dictionary<int,int> ReduceStockProducts){
-            
-            if(ReduceStockProducts.Any())
-            foreach(var item in ReduceStockProducts)
-            {
-                ProductViewModel product = await GetProductAsync(item.Key);
-                if(product != null)
+        public async Task ReduceStockProducts(Dictionary<int, int> ReduceStockProducts)
+        {
+
+            if (ReduceStockProducts.Any())
+                foreach (var item in ReduceStockProducts)
                 {
-                    product.Stock = product.Stock- item.Value; 
+                    ProductViewModel product = await GetProductAsync(item.Key);
+                    if (product != null)
+                    {
+                        product.Stock = product.Stock - item.Value;
 
-                    UpdateProductAsync(product);
+                        UpdateProductAsync(product);
+                    }
                 }
-            }
         }
 
-        public async Task DecreaseStockProduct(int idProduct, int stock){
-            
+        public async Task DecreaseStockProduct(int idProduct, int stock)
+        {
+
 
             ProductViewModel product = await GetProductAsync(idProduct);
-            if(product != null)
+            if (product != null)
             {
-                product.Stock = product.Stock - stock; 
+                product.Stock = product.Stock - stock;
 
                 UpdateProductAsync(product);
             }
         }
-    
-        public async Task IncreaseStockProduct(int idProduct, int stock){
-        
+
+        public async Task IncreaseStockProduct(int idProduct, int stock)
+        {
+
 
             ProductViewModel product = await GetProductAsync(idProduct);
-            if(product != null)
+            if (product != null)
             {
-                product.Stock = product.Stock + stock; 
+                product.Stock = product.Stock + stock;
 
                 UpdateProductAsync(product);
             }
         }
-        
+
 
     }
 }

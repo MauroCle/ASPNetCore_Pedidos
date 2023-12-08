@@ -1,31 +1,37 @@
 @using Microsoft.AspNetCore.Identity
 @model List<IdentityUser>
 
-@if(User.Identity != null && User.Identity.IsAuthenticated){
+@if (User.Identity != null && User.Identity.IsAuthenticated)
+{
 
-    @if(User.IsInRole("Administrador")){
+    @if (User.IsInRole("Administrador"))
+    {
         <h1>Users</h1>
         <ul>
-            @foreach(var item in Model)
-            {            
+            @foreach (var item in Model)
+            {
                 <li class="mb-2 row col-8 align-items-center">
-                    <p class="col-4">@item.UserName</p>  
+                    <p class="col-4">@item.UserName</p>
                     <div class="row justify-content-evenly col-6">
-                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning col-5 ml-2 mr-5">Asignar Rol</a> 
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger col-5">Eliminar usuario</a> 
-                    </div> 
-                    <hr />  
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning col-5 ml-2 mr-5">Asignar Rol</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger col-5">Eliminar usuario</a>
+                    </div>
+                    <hr />
                 </li>
             }
         </ul>
-    
-    }else{
-    <div class="alert alert-danger" style="margin-top:5%">
-        <p class="text-center m-auto">No tiene permisos para acceder a esta seccion.</p>
-    </div>
+
     }
-}else{
-  <div class="alert alert-danger" style="margin-top:5%">
-    <p class="text-center m-auto">Debe registrarse para poder acceder a las funcionalidades de esta pagina web.</p>
-  </div>
+    else
+    {
+        <div class="alert alert-danger" style="margin-top:5%">
+            <p class="text-center m-auto">No tiene permisos para acceder a esta seccion.</p>
+        </div>
+    }
+}
+else
+{
+    <div class="alert alert-danger" style="margin-top:5%">
+        <p class="text-center m-auto">Debe registrarse para poder acceder a las funcionalidades de esta pagina web.</p>
+    </div>
 }

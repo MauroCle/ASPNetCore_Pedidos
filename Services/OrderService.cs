@@ -70,8 +70,9 @@ public class OrderService : IOrderService
 
         return orderDetail;
     }
-    public async Task<List<Order>> GetOrdersWithProductsAsync(){
-        
+    public async Task<List<Order>> GetOrdersWithProductsAsync()
+    {
+
         List<Order> orders = await _context.Order.Include(o => o.Products).ToListAsync();
 
         if (orders == null)
@@ -81,39 +82,39 @@ public class OrderService : IOrderService
     }
     public async Task<bool> CreateOrderAsync(OrderCreateViewModel viewModel)
     {
-        var clientsList = await _context.Client.Include(x=> x.Address).ToListAsync();
+        var clientsList = await _context.Client.Include(x => x.Address).ToListAsync();
         var productsList = await _context.Product.ToListAsync();
         var products = new List<Product>();
 
-            var clientOrder = clientsList.FirstOrDefault(x => x.Id == viewModel.ClientId);
+        var clientOrder = clientsList.FirstOrDefault(x => x.Id == viewModel.ClientId);
 
-            if (clientOrder != null)
+        if (clientOrder != null)
+        {
+            foreach (var productId in viewModel.ProductStockDictionary.Keys)
             {
-                foreach (var productId in viewModel.ProductStockDictionary.Keys)
+                var product = productsList.FirstOrDefault(x => x.Id == productId);
+                if (product != null && viewModel.ProductStockDictionary[productId] > 0)
                 {
-                    var product = productsList.FirstOrDefault(x => x.Id == productId);
-                    if (product != null && viewModel.ProductStockDictionary[productId] >0)
-                    {
-                        products.Add(product);
-                    }
+                    products.Add(product);
                 }
-
-                Order newOrder = new Order
-                {
-                    OrderDate = viewModel.OrderDate,
-                    AddressId = clientOrder.Address.Id,
-                    ShippingAddress = clientOrder.Address,
-                    Products = products,
-                    ClientId = clientOrder.Id,
-                    ProductStockDictionary = viewModel.ProductStockDictionary
-                    
-                };
-
-                _context.Add(newOrder);
-                await _context.SaveChangesAsync();
-                return true;
             }
-        
+
+            Order newOrder = new Order
+            {
+                OrderDate = viewModel.OrderDate,
+                AddressId = clientOrder.Address.Id,
+                ShippingAddress = clientOrder.Address,
+                Products = products,
+                ClientId = clientOrder.Id,
+                ProductStockDictionary = viewModel.ProductStockDictionary
+
+            };
+
+            _context.Add(newOrder);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
 
         return false;
     }
@@ -145,137 +146,136 @@ public class OrderService : IOrderService
     }
     public async Task<bool> EditOrderAsync(int id, OrderEditViewModel orderView)
     {
-    var validationContext = new ValidationContext(orderView, serviceProvider: null, items: null);
-    var validationResults = new List<ValidationResult>();
+        var validationContext = new ValidationContext(orderView, serviceProvider: null, items: null);
+        var validationResults = new List<ValidationResult>();
 
-    if (Validator.TryValidateObject(orderView, validationContext, validationResults, validateAllProperties: true))
-    {
-        try
+        if (Validator.TryValidateObject(orderView, validationContext, validationResults, validateAllProperties: true))
         {
-            var order = await _context.Order
-                .Include(o => o.Products)
-                .Include(o => o.Client)
-                .Include(o => o.ShippingAddress)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            try
+            {
+                var order = await _context.Order
+                    .Include(o => o.Products)
+                    .Include(o => o.Client)
+                    .Include(o => o.ShippingAddress)
+                    .FirstOrDefaultAsync(m => m.Id == id);
 
-            if (order == null)
+                if (order == null)
+                {
+                    return false;
+                }
+
+                foreach (var item in orderView.ProductStockDictionary)
+                {
+                    if (item.Value > 0)
+                    {
+                        orderView.Products.Add(await _productService.GetProductModelAsync(item.Key));
+                    }
+                }
+
+                if (order.ProductStockDictionary != orderView.ProductStockDictionary)
+                {
+                    foreach (var item in orderView.ProductStockDictionary)
+                    {
+                        _productService.DecreaseStockProduct(item.Key, item.Value);
+                    }
+                }
+
+                order.OrderDate = orderView.OrderDate;
+                order.ClientId = orderView.ClientId;
+                order.Client = await _context.Client.FirstOrDefaultAsync(x => x.Id == orderView.ClientId);
+                order.ShippingAddress = await _context.Address.FirstOrDefaultAsync(x => x.ClientId == orderView.ClientId);
+                order.Products = orderView.Products;
+                order.ProductStockDictionary = orderView.ProductStockDictionary;
+
+
+                _context.Update(order);
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch (DbUpdateConcurrencyException)
             {
                 return false;
             }
-
-            foreach(var item in orderView.ProductStockDictionary)
-            {
-                if(item.Value >0){
-                    orderView.Products.Add( await _productService.GetProductModelAsync(item.Key));
-                }
-            }
-
-            if(order.ProductStockDictionary != orderView.ProductStockDictionary)
-            {
-                foreach(var item in orderView.ProductStockDictionary){
-                    
-                   
-                    _productService.DecreaseStockProduct(item.Key,item.Value);
-                 
-                }
-            }
-
-            order.OrderDate = orderView.OrderDate;
-            order.ClientId = orderView.ClientId;
-            order.Client = await _context.Client.FirstOrDefaultAsync(x => x.Id == orderView.ClientId);
-            order.ShippingAddress = await _context.Address.FirstOrDefaultAsync(x => x.ClientId == orderView.ClientId);
-            order.Products = orderView.Products;
-            order.ProductStockDictionary = orderView.ProductStockDictionary;
-
-
-            _context.Update(order);
-            await _context.SaveChangesAsync();
-
-            return true;
         }
-        catch (DbUpdateConcurrencyException)
-        {
-            return false;
-        }
-    }
 
-    return false;
-}   
-public async Task<bool> EditOrderWithoutProductsAsync(int id, OrderEditViewModel orderView)
-    {
-    var validationContext = new ValidationContext(orderView, serviceProvider: null, items: null);
-    var validationResults = new List<ValidationResult>();
-
-    if (Validator.TryValidateObject(orderView, validationContext, validationResults, validateAllProperties: true))
-    {
-        try
-        {
-            var order = await _context.Order
-                .Include(o => o.Products)
-                .Include(o => o.Client)
-                .Include(o => o.ShippingAddress)
-                .FirstOrDefaultAsync(m => m.Id == id);
-
-            if (order == null)
-            {
-                return false;
-            }
-        
-
-            order.OrderDate = orderView.OrderDate;
-            order.ClientId = orderView.ClientId;
-            order.Client = await _context.Client.FirstOrDefaultAsync(x => x.Id == orderView.ClientId);
-            order.ShippingAddress = await _context.Address.FirstOrDefaultAsync(x => x.ClientId == orderView.ClientId);
-            
-            _context.Update(order);
-            await _context.SaveChangesAsync();
-
-            return true;
-        }
-        catch (DbUpdateConcurrencyException)
-        {
-            return false;
-        }
-    }
-
-    return false;
-}   
-public async Task<Order> GetOrderAsync(int id)
-{
-      if (id <= 0)
-    {
-        return null;
-    }
-
-    var order = await _context.Order
-        .Include(o => o.Client)
-        .Include(o => o.ShippingAddress)
-        .FirstOrDefaultAsync(m => m.Id == id);
-
-    if (order == null)
-    {
-        return null;
-    }
-
-    return order;
-}
-
-public async Task<bool> DeleteOrderAsync(int id)
-{
-    if (_context.Order == null)
-    {
         return false;
     }
-
-    var order = await _context.Order.FindAsync(id);
-    
-    if (order != null)
+    public async Task<bool> EditOrderWithoutProductsAsync(int id, OrderEditViewModel orderView)
     {
-        _context.Order.Remove(order);
-        await _context.SaveChangesAsync();
-        return true;
+        var validationContext = new ValidationContext(orderView, serviceProvider: null, items: null);
+        var validationResults = new List<ValidationResult>();
+
+        if (Validator.TryValidateObject(orderView, validationContext, validationResults, validateAllProperties: true))
+        {
+            try
+            {
+                var order = await _context.Order
+                    .Include(o => o.Products)
+                    .Include(o => o.Client)
+                    .Include(o => o.ShippingAddress)
+                    .FirstOrDefaultAsync(m => m.Id == id);
+
+                if (order == null)
+                {
+                    return false;
+                }
+
+
+                order.OrderDate = orderView.OrderDate;
+                order.ClientId = orderView.ClientId;
+                order.Client = await _context.Client.FirstOrDefaultAsync(x => x.Id == orderView.ClientId);
+                order.ShippingAddress = await _context.Address.FirstOrDefaultAsync(x => x.ClientId == orderView.ClientId);
+
+                _context.Update(order);
+                await _context.SaveChangesAsync();
+
+                return true;
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return false;
+            }
+        }
+
+        return false;
+    }
+    public async Task<Order> GetOrderAsync(int id)
+    {
+        if (id <= 0)
+        {
+            return null;
+        }
+
+        var order = await _context.Order
+            .Include(o => o.Client)
+            .Include(o => o.ShippingAddress)
+            .FirstOrDefaultAsync(m => m.Id == id);
+
+        if (order == null)
+        {
+            return null;
+        }
+
+        return order;
     }
 
-    return false;
-}
+    public async Task<bool> DeleteOrderAsync(int id)
+    {
+        if (_context.Order == null)
+        {
+            return false;
+        }
+
+        var order = await _context.Order.FindAsync(id);
+
+        if (order != null)
+        {
+            _context.Order.Remove(order);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        return false;
+    }
 }

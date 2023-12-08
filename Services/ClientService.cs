@@ -33,7 +33,7 @@ namespace Examenes.Services
 
         public async Task<List<Client>> GetClientsWithoutAddressAsync()
         {
-            var query = from client in _context.Client.Include(x=> x.Address) select client;
+            var query = from client in _context.Client.Include(x => x.Address) select client;
 
             if (query.Any())
             {
@@ -65,7 +65,7 @@ namespace Examenes.Services
             _context.Add(client);
             await _context.SaveChangesAsync();
 
-            address.ClientId = client.Id; 
+            address.ClientId = client.Id;
             _context.Add(address);
             await _context.SaveChangesAsync();
 
@@ -110,17 +110,19 @@ namespace Examenes.Services
             await _context.SaveChangesAsync();
             return updatedClient;
         }
-        public async Task<ClientDeleteViewModel> GetClientDeleteByIdAsync(int id){
+        public async Task<ClientDeleteViewModel> GetClientDeleteByIdAsync(int id)
+        {
             Client client = await GetClientByIdAsync(id);
             Address address = await GetAddressByClientIdAsync(id);
 
-            ClientDeleteViewModel clientDelete = new ClientDeleteViewModel{
-                Id= client.Id,
-                FirstName= client.FirstName,
-                LastName= client.LastName,
-                Email= client.Email,
-                PhoneNumber= client.PhoneNumber,
-                Address= address
+            ClientDeleteViewModel clientDelete = new ClientDeleteViewModel
+            {
+                Id = client.Id,
+                FirstName = client.FirstName,
+                LastName = client.LastName,
+                Email = client.Email,
+                PhoneNumber = client.PhoneNumber,
+                Address = address
             };
             return clientDelete;
         }

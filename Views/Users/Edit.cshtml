@@ -5,9 +5,11 @@
 @{
     var roleList = ViewData["Roles"];
 }
-@if(User.Identity != null && User.Identity.IsAuthenticated){
+@if (User.Identity != null && User.Identity.IsAuthenticated)
+{
 
-    @if(User.IsInRole("Administrador")){
+    @if (User.IsInRole("Administrador"))
+    {
         <h1>Editar</h1>
 
         <h4>Usuarios</h4>
@@ -45,13 +47,17 @@
             <a asp-action="Index">Volver a la lista</a>
         </div>
 
-    }else{
-    <div class="alert alert-danger" style="margin-top:5%">
-        <p class="text-center m-auto">No tiene permisos para acceder a esta seccion.</p>
-    </div>
     }
-}else{
-  <div class="alert alert-danger" style="margin-top:5%">
-    <p class="text-center m-auto">Debe registrarse para poder acceder a las funcionalidades de esta pagina web.</p>
-  </div>
+    else
+    {
+        <div class="alert alert-danger" style="margin-top:5%">
+            <p class="text-center m-auto">No tiene permisos para acceder a esta seccion.</p>
+        </div>
+    }
+}
+else
+{
+    <div class="alert alert-danger" style="margin-top:5%">
+        <p class="text-center m-auto">Debe registrarse para poder acceder a las funcionalidades de esta pagina web.</p>
+    </div>
 }

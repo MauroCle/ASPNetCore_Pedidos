@@ -8,7 +8,8 @@ using Microsoft.AspNetCore.Authorization;
 namespace Clase11.Controllers;
 
 [Authorize(Roles = "Administrador")]
-public class RolesController :Controller{
+public class RolesController : Controller
+{
     private readonly ILogger<RolesController> _logger;
 
     private readonly RoleManager<IdentityRole> _roleManager;
@@ -22,7 +23,7 @@ public class RolesController :Controller{
     public IActionResult Index()
     {
         //listar todos los usuarios
-       var roles = _roleManager.Roles.ToList();
+        var roles = _roleManager.Roles.ToList();
         return View(roles);
     }
 

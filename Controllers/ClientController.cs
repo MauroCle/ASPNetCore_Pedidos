@@ -36,7 +36,7 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-               return NotFound(); 
+                return NotFound();
             }
 
             var client = await _clientService.GetClientByIdAsync(id.Value);
@@ -44,7 +44,7 @@ namespace Examen.Controllers
 
             if (client == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
 
             var clientView = new ClientDetailsViewModel
@@ -69,7 +69,7 @@ namespace Examen.Controllers
         // POST: Client/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-         [HttpPost]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Email,PhoneNumber,City,Street,Number,Apartment,Notes,PostalCode")] ClientCreateViewModel clientView)
         {
@@ -107,7 +107,7 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-               return NotFound(); 
+                return NotFound();
             }
 
             var client = await _clientService.GetClientByIdAsync(id.Value);
@@ -115,7 +115,7 @@ namespace Examen.Controllers
 
             if (client == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
 
             var clientView = new ClientDetailsViewModel
@@ -163,7 +163,7 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
 
             var client = await _clientService.GetClientByIdAsync(id.Value);
@@ -171,7 +171,7 @@ namespace Examen.Controllers
 
             if (client == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
 
             var clientView = new ClientDeleteViewModel
@@ -191,7 +191,7 @@ namespace Examen.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-           
+
             var hasOrders = await _clientService.ClientHasOrdersAsync(id);
             if (hasOrders)
             {
@@ -206,7 +206,7 @@ namespace Examen.Controllers
             if (!success)
             {
                 ClientDeleteViewModel clientDelete = await _clientService.GetClientDeleteByIdAsync(id);
-                
+
                 return View(clientDelete);
             }
 

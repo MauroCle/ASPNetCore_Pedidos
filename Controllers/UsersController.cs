@@ -9,7 +9,8 @@ using Microsoft.AspNetCore.Authorization;
 namespace Examenes.Controllers;
 
 [Authorize(Roles = "Administrador")]
-public class UsersController :Controller{
+public class UsersController : Controller
+{
 
     private readonly UserManager<IdentityUser> _userManager;
     private readonly RoleManager<IdentityRole> _roleManager;
@@ -26,40 +27,40 @@ public class UsersController :Controller{
     public IActionResult Index()
     {
         //listar todos los usuarios
-       var users = _userManager.Users.ToList();
+        var users = _userManager.Users.ToList();
         return View(users);
     }
 
     //Edit Usuairos
     public async Task<IActionResult> Edit(string Id)
     {
-        if(string.IsNullOrEmpty(Id))
+        if (string.IsNullOrEmpty(Id))
         {
             return NotFound();
         }
 
         var user = await _userManager.FindByIdAsync(Id);
-       // ViewData["Roles"] = _roleManager.Roles.Select(x=> x.UserName).ToList();
-         var userViewModel = new UserEditViewModel();
+        // ViewData["Roles"] = _roleManager.Roles.Select(x=> x.UserName).ToList();
+        var userViewModel = new UserEditViewModel();
         userViewModel.UserName = user.UserName ?? string.Empty; // ?? string.Empty => Si es null le pone una string vacia
         userViewModel.Email = user.Email ?? string.Empty;
         userViewModel.Roles = new SelectList(_roleManager.Roles.ToList());
-        
+
         return View(userViewModel);
     }
     [HttpPost]
-      public async Task<IActionResult> Edit(UserEditViewModel model)
-      {
+    public async Task<IActionResult> Edit(UserEditViewModel model)
+    {
         var user = await _userManager.FindByNameAsync(model.UserName);
-         
-        if(user == null)
+
+        if (user == null)
         {
             return NotFound();
         }
 
-        await _userManager.AddToRoleAsync(user,model.Role);
+        await _userManager.AddToRoleAsync(user, model.Role);
         return RedirectToAction("Index");
-      }
+    }
 
 
     public async Task<IActionResult> Delete(string Id)
@@ -68,7 +69,7 @@ public class UsersController :Controller{
 
         if (user == null)
         {
-            return NotFound(); 
+            return NotFound();
         }
 
         var result = await _userManager.DeleteAsync(user);

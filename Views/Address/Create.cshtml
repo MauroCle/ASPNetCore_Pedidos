@@ -44,37 +44,39 @@
                 <span asp-validation-for="PostalCode" class="text-danger"></span>
             </div>
             <div class="form-group">
-                @if(Model.Clients.FirstOrDefault() != null && Model.Clients.Any()){
-                <label asp-for="ClientId" class="control-label"></label>
-                <select asp-for="ClientId" class="form-select">
-                
-                    @foreach (var item in Model.Clients)
-                    {
-                        <option value="@item.Id">@item.FirstName @item.LastName - @item.Email</option>
-                    }
-                </select>
-                <div class="form-group row justify-content-around">
-                <input  type="submit" value="Guardar" class="btn btn-success mt-3 col-4" />
-                <a type="button" asp-controller="Address" asp-action="Index" class="btn btn-info mt-3 col-4">Volver a la lista</a>
-                </div>
-                }else{
-                <label asp-for="ClientId" class="control-label"></label>
-                <select disabled class="form-select">
-                    <option>No hay clientes disponibles.</option>
-                </select>
-                <div class="form-group row justify-content-around">
-                <input disabled type="button" value="Guardar" class="btn btn-secondary mt-3 col-4" />
-                <a type="button" asp-controller="Address" asp-action="Index" class="btn btn-info mt-3 col-4">Volver a la lista</a>
-                </div>
+                @if (Model.Clients.FirstOrDefault() != null && Model.Clients.Any())
+                {
+                    <label asp-for="ClientId" class="control-label"></label>
+                    <select asp-for="ClientId" class="form-select">
+
+                        @foreach (var item in Model.Clients)
+                        {
+                            <option value="@item.Id">@item.FirstName @item.LastName - @item.Email</option>
+                        }
+                    </select>
+                    <div class="form-group row justify-content-around">
+                        <input type="submit" value="Guardar" class="btn btn-success mt-3 col-4" />
+                        <a type="button" asp-controller="Address" asp-action="Index" class="btn btn-info mt-3 col-4">Volver a la lista</a>
+                    </div>
+                }
+                else
+                {
+                    <label asp-for="ClientId" class="control-label"></label>
+                    <select disabled class="form-select">
+                        <option>No hay clientes disponibles.</option>
+                    </select>
+                    <div class="form-group row justify-content-around">
+                        <input disabled type="button" value="Guardar" class="btn btn-secondary mt-3 col-4" />
+                        <a type="button" asp-controller="Address" asp-action="Index" class="btn btn-info mt-3 col-4">Volver a la lista</a>
+                    </div>
                 }
             </div>
-            
+
         </form>
     </div>
 </div>
 
 <div>
-
 </div>
 
 @section Scripts {

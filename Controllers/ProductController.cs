@@ -41,14 +41,14 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
 
             var productView = await _productService.GetProductAsync(id.Value);
 
             if (productView == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
 
             return View(productView);
@@ -72,9 +72,9 @@ namespace Examen.Controllers
             {
                 string error = await _productService.CreateEditValidation(productView);
 
-                if(!string.IsNullOrEmpty(error))
+                if (!string.IsNullOrEmpty(error))
                 {
-                    ModelState.AddModelError(string.Empty,error);
+                    ModelState.AddModelError(string.Empty, error);
                     return View(productView);
                 }
 
@@ -89,14 +89,14 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
 
             var productView = await _productService.GetProductAsync(id.Value);
 
             if (productView == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
 
             return View(productView);
@@ -111,19 +111,19 @@ namespace Examen.Controllers
         {
             if (id != productView.Id)
             {
-                return NotFound(); 
+                return NotFound();
             }
 
             if (ModelState.IsValid)
             {
                 string error = await _productService.CreateEditValidation(productView);
 
-                if(!string.IsNullOrEmpty(error))
+                if (!string.IsNullOrEmpty(error))
                 {
-                    ModelState.AddModelError(string.Empty,error);
+                    ModelState.AddModelError(string.Empty, error);
                     return View(productView);
                 }
-                
+
                 try
                 {
                     await _productService.UpdateProductAsync(productView);
@@ -142,14 +142,14 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
 
             var productView = await _productService.GetProductAsync(id.Value);
 
             if (productView == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
 
             return View(productView);
@@ -162,19 +162,22 @@ namespace Examen.Controllers
         {
             List<Order> orders = await _orderService.GetOrdersWithProductsAsync();
 
-            if(orders == null || !orders.Any())
+            if (orders == null || !orders.Any())
             {
                 await _productService.DeleteProductAsync(id);
                 return RedirectToAction(nameof(Index));
             }
 
 
-            if(await _productService.DeleteValidation(id, orders)){
+            if (await _productService.DeleteValidation(id, orders))
+            {
 
                 await _productService.DeleteProductAsync(id);
                 return RedirectToAction(nameof(Index));
 
-            }else{
+            }
+            else
+            {
 
                 ModelState.AddModelError(string.Empty, "No se puede eliminar un producto con pedidos asociados.");
                 ProductViewModel productDelete = await _productService.GetProductAsync(id);

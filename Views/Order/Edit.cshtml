@@ -18,7 +18,7 @@
                 <input asp-for="OrderDate" class="form-control" />
                 <span asp-validation-for="OrderDate" class="text-danger"></span>
             </div>
-    <div class="form-group">
+            <div class="form-group">
                 <label asp-for="ClientId" class="control-label"></label>
                 <select asp-for="ClientId" class="form-select">
                     @foreach (var item in Model.Clients)
@@ -29,7 +29,7 @@
                 <span asp-validation-for="ClientId" class="text-danger"></span>
             </div>
             <label asp-for="Products" class="control-label"></label>
-              <table class="table text-center">
+            <table class="table text-center">
                 <thead>
                     <tr>
                         <th><label asp-for="Products"></label></th>
@@ -38,26 +38,26 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
-            @foreach (var item in Model.Products)
-                {
-                    <tr>
-                        <div class="row mt-3 alin">
-                        <td class="col-6"><p class="m-none">@item.Name - @item.Description</p></td>
-                        <td class="col-4"><p>@item.Stock</p></td>
-                        <td class="col-1"><input class="text-center" type="number" name="ProductStockDictionary[@item.Id]" value="0" max="@item.Stock"/></td>
-                        </div>
-                    </tr>
-                }
-                </tbody>
-            </table>
 
-            <div class="form-group row justify-content-around col-12">
-                <input type="submit" value="Guardar" class="btn btn-success mt-3 col-4"></input> 
-                <a asp-action="Index" class="btn btn-info mt-3 col-4">Volver a la lista</a>
-            </div>
-        </form>
+                    @foreach (var item in Model.Products)
+                    {
+                        <tr>
+                            <div class="row mt-3 alin">
+                            <td class="col-6"><p class="m-none">@item.Name - @item.Description</p></td>
+                            <td class="col-4"><p>@item.Stock</p></td>
+                            <td class="col-1"><input class="text-center" type="number" name="ProductStockDictionary[@item.Id]" value="0" max="@item.Stock" /></td>
+        </div>
+        </tr>
+                    }
+    </tbody>
+    </table>
+
+    <div class="form-group row justify-content-around col-12">
+        <input type="submit" value="Guardar" class="btn btn-success mt-3 col-4"></input>
+        <a asp-action="Index" class="btn btn-info mt-3 col-4">Volver a la lista</a>
     </div>
+    </form>
+</div>
 </div>
 
 

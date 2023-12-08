@@ -11,19 +11,20 @@ public class HomeController : Controller
     private readonly ILogger<HomeController> _logger;
     private readonly IHomeService _homeService;
 
-    public HomeController(ILogger<HomeController> logger,IHomeService homeService)
+    public HomeController(ILogger<HomeController> logger, IHomeService homeService)
     {
         _logger = logger;
-        _homeService= homeService;
+        _homeService = homeService;
 
     }
 
 
     public async Task<IActionResult> Index()
     {
-        HomeViewModel homeViewModel= new HomeViewModel{
+        HomeViewModel homeViewModel = new HomeViewModel
+        {
             AvailableClients = await _homeService.AnyClientAvailable(),
-            AvailableAddress =await _homeService.AnyAddressAvailable(),
+            AvailableAddress = await _homeService.AnyAddressAvailable(),
             AvailableOrders = await _homeService.AnyOrderAvailable(),
             AvailableProducts = await _homeService.AnyProductAvailable()
 

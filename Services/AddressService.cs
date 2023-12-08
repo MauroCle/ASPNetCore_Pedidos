@@ -12,19 +12,20 @@ public class AddressService : IAddressService
     {
         _context = context;
     }
-    public async Task<Address> GetAddressByIdAsync(int id){
+    public async Task<Address> GetAddressByIdAsync(int id)
+    {
 
         var address = await _context.Address.Include(a => a.Client).Where(x => x.Id == id).FirstOrDefaultAsync();
-        
-        if(address != null)
+
+        if (address != null)
             return address;
         else
-             return null;
+            return null;
     }
     public async Task<List<AddressViewModel>> GetAddressesAsync()
     {
         var addresses = await _context.Address.Include(a => a.Client).ToListAsync();
-        
+
 
         List<AddressViewModel> addressesView = addresses.Select(item => new AddressViewModel
         {
@@ -41,17 +42,17 @@ public class AddressService : IAddressService
 
         return addressesView;
     }
-        public async Task<List<AddressViewModel>> GetAddressesAsync(string filter)
+    public async Task<List<AddressViewModel>> GetAddressesAsync(string filter)
     {
         var addresses = await _context.Address.Include(a => a.Client).ToListAsync();
-        
-            if (!string.IsNullOrEmpty(filter))
-            {
-                addresses = addresses.Where(x => x.City.ToLower().Contains(filter.ToLower()) ||
-                                         x.Street.ToLower().Contains(filter.ToLower()) ||
-                                         x.Number.ToString().ToLower().Contains(filter.ToLower())||
-                                         x.PostalCode.ToLower().Contains(filter.ToLower())).ToList();
-            }
+
+        if (!string.IsNullOrEmpty(filter))
+        {
+            addresses = addresses.Where(x => x.City.ToLower().Contains(filter.ToLower()) ||
+                                     x.Street.ToLower().Contains(filter.ToLower()) ||
+                                     x.Number.ToString().ToLower().Contains(filter.ToLower()) ||
+                                     x.PostalCode.ToLower().Contains(filter.ToLower())).ToList();
+        }
         List<AddressViewModel> addressesView = addresses.Select(item => new AddressViewModel
         {
             Id = item.Id,
@@ -150,7 +151,7 @@ public class AddressService : IAddressService
             return null;
         }
 
-        var query = from client in _context.Client.Where( x=> x.Id == address.ClientId) select client;
+        var query = from client in _context.Client.Where(x => x.Id == address.ClientId) select client;
 
         if (query.Any())
         {

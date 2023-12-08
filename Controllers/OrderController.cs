@@ -13,7 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.View;
 
 namespace Examen.Controllers
-{    
+{
     [Authorize(Roles = "Administrador,Comercial")]
     public class OrderController : Controller
     {
@@ -41,14 +41,14 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
 
             var orderDetail = await _orderService.GetOrderDetailsAsync(id.Value);
 
             if (orderDetail == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
 
             return View(orderDetail);
@@ -59,8 +59,8 @@ namespace Examen.Controllers
             var viewModel = new OrderCreateViewModel
             {
                 OrderDate = DateTime.Today,
-                Clients = await _clientService.GetAllClientsAsync(""), 
-                Products = await _productService.GetAvalibleProductsAsync() 
+                Clients = await _clientService.GetAllClientsAsync(""),
+                Products = await _productService.GetAvalibleProductsAsync()
             };
 
             ViewData["clients"] = await _clientService.GetAllClientsAsync("");
@@ -77,31 +77,31 @@ namespace Examen.Controllers
             var newViewModel = new OrderCreateViewModel
             {
                 OrderDate = DateTime.Today,
-                Clients = await _clientService.GetAllClientsAsync(""), 
-                Products = await _productService.GetAvalibleProductsAsync() 
+                Clients = await _clientService.GetAllClientsAsync(""),
+                Products = await _productService.GetAvalibleProductsAsync()
             };
 
-            foreach(var item in clientsWithoutAddress)
-            {   
-                if(viewModel.ClientId == item.Id)
+            foreach (var item in clientsWithoutAddress)
+            {
+                if (viewModel.ClientId == item.Id)
                 {
                     ModelState.AddModelError(string.Empty, "El cliente debe tener una dirección asociada.");
                     return View(newViewModel);
-                   
+
                 }
             }
 
-            if(!viewModel.ProductStockDictionary.Values.Any(x => x > 0))
+            if (!viewModel.ProductStockDictionary.Values.Any(x => x > 0))
             {
                 ModelState.AddModelError(string.Empty, "Debe ingresar cantidades para almenos un producto.");
-                    
+
                 return View(newViewModel);
             }
 
             var result = await _orderService.CreateOrderAsync(viewModel);
 
             if (result)
-            {   
+            {
                 _productService.ReduceStockProducts(viewModel.ProductStockDictionary);
                 return RedirectToAction("Index");
             }
@@ -112,14 +112,14 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
-            
+
             var orderEdit = await _orderService.GetOrderEditViewModelAsync(id.Value);
 
             if (orderEdit == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
 
             //  ViewData["clients"] = _clientService.GetAllClientsAsync("");
@@ -141,24 +141,19 @@ namespace Examen.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            if(!orderView.ProductStockDictionary.Values.Any(x => x > 0))
+            if (!orderView.ProductStockDictionary.Values.Any(x => x > 0))
             {
                 await _orderService.EditOrderWithoutProductsAsync(id, orderView);
-                    
+
                 return RedirectToAction(nameof(Index));
             }
-            
 
- 
             var result = await _orderService.EditOrderAsync(id, orderView);
 
             if (result)
             {
                 return RedirectToAction(nameof(Index));
             }
-
-
-          
 
             return View(newViewModel);
         }
@@ -168,14 +163,14 @@ namespace Examen.Controllers
         {
             if (id == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
 
             var order = await _orderService.GetOrderDetailsAsync(id.Value);
 
             if (order == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
 
             return View(order);
