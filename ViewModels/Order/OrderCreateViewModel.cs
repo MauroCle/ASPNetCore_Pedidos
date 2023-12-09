@@ -13,8 +13,9 @@ public class OrderCreateViewModel{
    // public List<int> ProductIds {get; set;}
    [Display(Name = "Stock de productos")]
    public Dictionary<int, int> ProductStockDictionary { get; set; }
-   public List<Client>? Clients { get; set; }
+   public ICollection<Client>? Clients { get; set; } //Lo cambié a Icollection para probar algo, era List
    [Display(Name="Productos")]
-   public List<Product>? Products { get; set; }
+   public ICollection<Product>? Products { get; set; } //Lo cambié a Icollection para probar algo, era List
+
 }
 

@@ -33,7 +33,7 @@
                     <tr>
                         <th><label asp-for="Products"></label></th>
                         <th><label asp-for="ProductStockDictionary"></label></th>
-                        <th>Agregar cantidad</th>
+                        <th>Cantidad</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -43,10 +43,26 @@
                         <tr>
                             <div class="row mt-3 alin">
                             <td class="col-6"><p class="m-none">@item.Name - @item.Description</p></td>
-                            <td class="col-4"><p>@item.Stock</p></td>
-                            <td class="col-1"><input class="text-center" type="number" name="ProductStockDictionary[@item.Id]" value="0" max="@item.Stock" /></td>
-        </div>
-        </tr>
+                            <td class="col-4"><p>
+                                @if(Model.ProductStockDictionary.ContainsKey(item.Id))
+                                {
+                                    @(Model.ProductStockDictionary[item.Id]+item.Stock)
+                                }else{
+                                    @(item.Stock)
+                                }
+                                </p></td>
+                            <td class="col-1">
+                                <input class="text-center" 
+                                       type="number" 
+                                       name="ProductStockDictionary[@item.Id]" 
+                                       value="@(Model.ProductStockDictionary.GetValueOrDefault(item.Id, 0))"
+                                       max="@(Model.ProductStockDictionary.GetValueOrDefault(item.Id, 0) + item.Stock)"
+                                       min="0">
+                                </input>
+                            </td>
+
+                            </div>
+                        </tr>
                     }
     </tbody>
     </table>

@@ -63,7 +63,7 @@ namespace Examen.Controllers
                 Products = await _productService.GetAvalibleProductsAsync()
             };
 
-            ViewData["clients"] = await _clientService.GetAllClientsAsync("");
+            // ViewData["clients"] = await _clientService.GetAllClientsAsync("");
             return View(viewModel);
         }
 
@@ -100,13 +100,12 @@ namespace Examen.Controllers
 
             var result = await _orderService.CreateOrderAsync(viewModel);
 
-            if (result)
+             if (result) 
             {
-                _productService.ReduceStockProducts(viewModel.ProductStockDictionary);
-                return RedirectToAction("Index");
-            }
+                 return RedirectToAction("Index");
+             }
 
-            return View(viewModel);
+            return View(newViewModel);
         }
         public async Task<IActionResult> Edit(int? id)
         {
@@ -133,7 +132,7 @@ namespace Examen.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,OrderDate,ProductIds,ClientId,Clients,Products,ProductStockDictionary")] OrderEditViewModel orderView)
         {
-
+            
             var newViewModel = await _orderService.GetOrderEditViewModelAsync(id);
 
             if (id != orderView.Id)
@@ -141,20 +140,34 @@ namespace Examen.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            if (!orderView.ProductStockDictionary.Values.Any(x => x > 0))
+            if (orderView.ProductStockDictionary.Values.Any(x => x < 0))
             {
-                await _orderService.EditOrderWithoutProductsAsync(id, orderView);
+                ModelState.AddModelError(string.Empty, "No debe ingresar cantidades negativas.");
 
-                return RedirectToAction(nameof(Index));
+                return View(newViewModel);
             }
 
-            var result = await _orderService.EditOrderAsync(id, orderView);
-
-            if (result)
+            if (orderView.ProductStockDictionary.Values.Any(x => x > 0))
             {
-                return RedirectToAction(nameof(Index));
+
+                var result = await _orderService.EditOrderAsync(id, orderView);
+
+                if (result)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+
+                // await _orderService.EditOrderWithoutProductsAsync(id, orderView);
+
+                // return RedirectToAction(nameof(Index));
+            }
+            else{
+                ModelState.AddModelError(string.Empty, "Debe ingresar cantidad para almenos 1 producto.");
+
+                return View(newViewModel);
             }
 
+            
             return View(newViewModel);
         }
 

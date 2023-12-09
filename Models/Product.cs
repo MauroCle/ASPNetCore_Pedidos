@@ -13,8 +13,9 @@ public class Product
     public float Price { get; set; }
      [Display(Name="Precio")]
     public int Stock {get;set;}
-
     // Muchos a muchos (N:N)
     [Display(Name="Ordenes")]
     public ICollection<Order>? Orders { get; set; }
+    //Muchos a uno (N:1)
+    public ICollection<StockMovement>? StockMovements { get; set; }
 }

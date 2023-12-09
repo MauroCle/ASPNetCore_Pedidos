@@ -67,6 +67,10 @@ namespace Examenes.Services
         {
             return await _context.Product.FindAsync(id);
         }
+        public async Task<List<Product>> GetProductsModelAsync()
+        {
+            return await _context.Product.ToListAsync();
+        }
         public async Task CreateProductAsync(ProductViewModel productViewModel)
         {
             var product = new Product

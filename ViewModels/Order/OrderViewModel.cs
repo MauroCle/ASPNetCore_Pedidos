@@ -11,8 +11,8 @@ public class OrderViewModel{
     [Display(Name="Dirección")]
     public string ShippingAddressData { get; set; }
 
-    [Display(Name="Cantidad de productos")]
-    public int ProductsQuantity { get; set; }
+    [Display(Name="Variedad de productos")]
+    public int ProductsQuantity { get; set; } //TODO cambiar el nombre de la variable donde se use. Ya no es representativo.
 
     [Display(Name="Cliente")]
     public string ClientData { get; set; }
