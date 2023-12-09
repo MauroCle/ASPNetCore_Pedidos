@@ -47,7 +47,10 @@ namespace Examenes.Services
         {
             return await _context.Client.FindAsync(id);
         }
-
+        public async Task<Client> GetClientByIdWithAddressAsync(int id)
+        {
+            return await _context.Client.Include(x=>x.Address).Where(x => x.Id == id).SingleOrDefaultAsync();
+        }
         public async Task<Address> GetAddressByClientIdAsync(int clientId)
         {
             return await _context.Address.Where(m => m.ClientId == clientId).FirstOrDefaultAsync();

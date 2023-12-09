@@ -23,6 +23,7 @@ namespace Examenes.Data
         public DbSet<Examenes.Models.Product> Product { get; set; } = default!;
 
         public DbSet<Examenes.Models.Order> Order { get; set; } = default!;
+        public DbSet<Examenes.Models.StockMovement> StockMovement { get; set; } = default!;
         
        protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -49,6 +50,18 @@ namespace Examenes.Data
             .HasMany(o => o.Products)
             .WithMany(p => p.Orders)
             .UsingEntity(j => j.ToTable("OrderProduct"));
+
+        // Configuración de relaciones uno a muchos (1:N) entre StockMovement y Order
+        modelBuilder.Entity<StockMovement>()
+            .HasOne(m => m.Order)
+            .WithMany(o => o.StockMovements)
+            .HasForeignKey(m => m.IdOrder);
+
+        // Configuración de relaciones uno a muchos (1:N) entre StockMovement y Product
+        modelBuilder.Entity<StockMovement>()
+            .HasOne(m => m.Product)
+            .WithMany(p => p.StockMovements)
+            .HasForeignKey(m => m.IdProduct);
 
         base.OnModelCreating(modelBuilder);
     //En realidad esto ya está arriba, creo que ahi está el problema.

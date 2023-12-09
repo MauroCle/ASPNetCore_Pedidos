@@ -20,6 +20,7 @@ builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IHomeService, HomeService>();
+builder.Services.AddScoped<IStockMovementService, StockMovementService>();
 
 
 var app = builder.Build();

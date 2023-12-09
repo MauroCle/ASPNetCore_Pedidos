@@ -8,6 +8,7 @@ namespace  Examenes.Services;
         Task<List<Product>> GetAvalibleProductsAsync();
         Task<ProductViewModel> GetProductAsync(int id);
         Task<Product> GetProductModelAsync(int id);
+        Task<List<Product>> GetProductsModelAsync();
         Task CreateProductAsync(ProductViewModel productViewModel);
         Task UpdateProductAsync(ProductViewModel productViewModel);
         Task DeleteProductAsync(int id);

@@ -13,4 +13,7 @@ public class OrderDetailViewModel{
     public List<Product> Products {get;set;}
     [Display(Name="Datos del cliente")]
     public string ClientData { get; set; }
+    [Display(Name="Stock Disponible")]
+    public Dictionary<int, int> ProductStockDictionary { get; set; }
+
 }

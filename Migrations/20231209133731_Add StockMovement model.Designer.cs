@@ -3,6 +3,7 @@ using System;
 using Examenes.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Examen.Migrations
 {
     [DbContext(typeof(YaPedidosContext))]
-    partial class YaPedidosContextModelSnapshot : ModelSnapshot
+    [Migration("20231209133731_Add StockMovement model")]
+    partial class AddStockMovementmodel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.13");
@@ -130,33 +133,6 @@ namespace Examen.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Product");
-                });
-
-            modelBuilder.Entity("Examenes.Models.StockMovement", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("IdOrder")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("IdProduct")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("MovementType")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdOrder");
-
-                    b.HasIndex("IdProduct");
-
-                    b.ToTable("StockMovement");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -370,6 +346,33 @@ namespace Examen.Migrations
                     b.ToTable("OrderProduct", (string)null);
                 });
 
+            modelBuilder.Entity("StockMovement", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("IdOrder")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("IdProduct")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MovementType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdOrder");
+
+                    b.HasIndex("IdProduct");
+
+                    b.ToTable("StockMovement");
+                });
+
             modelBuilder.Entity("Examenes.Models.Address", b =>
                 {
                     b.HasOne("Examenes.Models.Client", "Client")
@@ -398,25 +401,6 @@ namespace Examen.Migrations
                     b.Navigation("Client");
 
                     b.Navigation("ShippingAddress");
-                });
-
-            modelBuilder.Entity("Examenes.Models.StockMovement", b =>
-                {
-                    b.HasOne("Examenes.Models.Order", "Order")
-                        .WithMany("StockMovements")
-                        .HasForeignKey("IdOrder")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Examenes.Models.Product", "Product")
-                        .WithMany("StockMovements")
-                        .HasForeignKey("IdProduct")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -483,6 +467,25 @@ namespace Examen.Migrations
                         .HasForeignKey("ProductsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("StockMovement", b =>
+                {
+                    b.HasOne("Examenes.Models.Order", "Order")
+                        .WithMany("StockMovements")
+                        .HasForeignKey("IdOrder")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Examenes.Models.Product", "Product")
+                        .WithMany("StockMovements")
+                        .HasForeignKey("IdProduct")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Examenes.Models.Address", b =>
