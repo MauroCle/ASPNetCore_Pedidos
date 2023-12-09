@@ -14,7 +14,7 @@ public class Address
     [Display(Name="Departamento")]
     public string Apartment{ get; set; }
     [Display(Name="Notas")]
-    public string Notes { get; set; }
+    public string? Notes { get; set; }
     [Display(Name="Codigo Postal")]
     public string PostalCode { get; set; }
     [Display(Name="ClienteId")]

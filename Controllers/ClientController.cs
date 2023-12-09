@@ -10,6 +10,7 @@ using Examenes.Models;
 using Examenes.ViewModels;
 using Examenes.Services;
 using Microsoft.AspNetCore.Authorization;
+using System.Text.RegularExpressions;
 
 namespace Examen.Controllers
 {
@@ -73,6 +74,7 @@ namespace Examen.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,FirstName,LastName,Email,PhoneNumber,City,Street,Number,Apartment,Notes,PostalCode")] ClientCreateViewModel clientView)
         {
+
             ModelState.Remove("Orders");
             if (ModelState.IsValid)
             {
@@ -143,6 +145,7 @@ namespace Examen.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            ModelState.Remove("Address");
             if (ModelState.IsValid)
             {
                 var updatedClient = await _clientService.GetClientByIdAsync(client.Id);
