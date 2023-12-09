@@ -68,13 +68,20 @@ N:1 -> Order
 ```
 Order
 ```
-1:1 -> Address 
+1:N -> Address 
 1:N -> Client
 N:N -> Product
+N:1 -> StockMovement
 ```
 Product
 ```
 N:N -> Order
+N:1 -> StockMovement
+```
+StockMovement
+```
+1:N -> Order
+1:n -> Product
 ```
 
 
@@ -127,10 +134,12 @@ _Importante: No se puede eliminar una dirección si el cliente asociado tiene al
 ```
 Dispondrá de un buscador para localizar las ordenes.
 • Al generar una nueva orden se mostrarán solo los productos con stock disponible y clientes con dirección cargada.
-• La cantidad maxima disponible para cada producto coincidirá con el stcok.
-• Está disponible la edición de la orden para cambiar la fecha, cliente o agregar productos.
+• La cantidad maxima ingresable para cada producto coincidirá con el stock del mismo.
+• Está disponible la edición de la orden para cambiar la fecha, cliente.
+• Desde edición se podrá modificar la cantidda solicitada de cada producto.
+• La cantidad disponible de los productos será igual a su stock actual + la cantidad previamente asignada en la orden.
 • Al generar una orden o editarla, disminuirá el stock disponible del producto seleccionado.
-• Los detalles de las ordenes incluirán los datos del cliente asi como los productos seleccionados
+• Los detalles de las ordenes incluirán los datos del cliente asi como los productos y cantidades.
 
 ```
 <br>
