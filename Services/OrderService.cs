@@ -108,6 +108,28 @@ public class OrderService : IOrderService
 
         return orderDetail;
     }
+
+        public async Task<OrderDetailsStockViewModel> GetOrderDetailsStockAsync(int id)
+    {
+        var order = await _context.Order
+            .Include(o => o.StockMovements)
+            .FirstOrDefaultAsync(m => m.Id == id);
+
+        var movements = await _context.StockMovement.Where(x=>x.IdOrder==id).Include(x=>x.Product).ToListAsync();
+
+        if (order == null)
+        {
+            return null;
+        }
+
+        var orderDetail = new OrderDetailsStockViewModel
+        {
+            Id = order.Id,
+            StockMovements = movements
+        };
+
+        return orderDetail;
+    }
     public async Task<List<Order>> GetOrdersWithProductsAsync()
     {
 

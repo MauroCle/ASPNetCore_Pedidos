@@ -1,0 +1,38 @@
+@model Examenes.ViewModels.OrderDetailsStockViewModel;
+
+@{
+    ViewData["Title"] = "Details";
+    int iteration = 1;
+}
+
+<h3 class="text-center">Movimientos de stock asociados a la orden</h3>
+
+<div class="row col-9 m-auto">
+    <hr />
+    <table class="table text-center">
+        <thead>
+            <tr>
+                <th class="col-3"><label>Producto</label></th>
+                <th class="col-3"><label>Tipo de movimiento</label></th>
+                <th class="col-3"><label>Cantidad</label></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model.StockMovements)
+            {
+                <tr>
+                    <div class="row">
+                        <td class="col-3"><p class="m-none">@item.Product.Name - @item.Product.Description</p></td>
+                        <td class="col-3"><p>@item.MovementType</p></td>
+                        <td class="col-3"><p>@item.Quantity</p></td>
+                    </div>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<div class="form-group row justify-content-around col-5 m-auto">
+    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-warning mt-3 col-3">Detalles</a>
+    <a asp-action="Index" class="btn btn-info mt-3 col-3">Volver a la lista</a>
+</div>

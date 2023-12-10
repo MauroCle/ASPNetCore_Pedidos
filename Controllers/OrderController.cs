@@ -53,6 +53,27 @@ namespace Examen.Controllers
 
             return View(orderDetail);
         }
+            public async Task<IActionResult> DetailsStock(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var order = await _orderService.GetOrderDetailsStockAsync(id.Value);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            OrderDetailsStockViewModel OrderDetailsStock = new OrderDetailsStockViewModel(){
+                Id=order.Id,
+                StockMovements=order.StockMovements
+            };
+
+            return View(OrderDetailsStock);
+        }
 
         public async Task<IActionResult> Create()
         {

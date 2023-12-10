@@ -20,7 +20,7 @@ En el proyecto se encontrarán 4 secciones principales y una de administracción
 
 ### Accesos 📋
 
-Se dispone de accesos ya configurados para verificar accesos y funcionalidades:
+Se dispone de usuarios ya configurados para verificar accesos y funcionalidades:
 
 Sin Roles:
 ```
