@@ -51,7 +51,9 @@ public class AddressService : IAddressService
             addresses = addresses.Where(x => x.City.ToLower().Contains(filter.ToLower()) ||
                                      x.Street.ToLower().Contains(filter.ToLower()) ||
                                      x.Number.ToString().ToLower().Contains(filter.ToLower()) ||
-                                     x.PostalCode.ToLower().Contains(filter.ToLower())).ToList();
+                                     x.PostalCode.ToLower().Contains(filter.ToLower())||
+                                     x.Client.FirstName.ToLower().Contains(filter.ToLower())||
+                                     x.Client.LastName.ToLower().Contains(filter.ToLower())).ToList();
         }
         List<AddressViewModel> addressesView = addresses.Select(item => new AddressViewModel
         {

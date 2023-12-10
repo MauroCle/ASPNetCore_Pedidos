@@ -140,6 +140,7 @@ Dispondrá de un buscador para localizar las ordenes.
 • La cantidad disponible de los productos será igual a su stock actual + la cantidad previamente asignada en la orden.
 • Al generar una orden o editarla, disminuirá el stock disponible del producto seleccionado.
 • Los detalles de las ordenes incluirán los datos del cliente asi como los productos y cantidades.
+• El boton "Stocks" mostrará un informe con todos los movimientos de stock historicos correspondientes a una orden puntual.
 
 ```
 <br>
