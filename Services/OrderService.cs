@@ -254,7 +254,6 @@ public class OrderService : IOrderService
                             
                             if(!order.Products.Contains(await _productService.GetProductModelAsync(item.Key)))
                             {
-                                
                                 order.Products.Add(await _productService.GetProductModelAsync(item.Key));
                             }
 
@@ -269,7 +268,11 @@ public class OrderService : IOrderService
                                 };
 
                             await _stockMovementService.CreateStockInMovementAsync(newProductStock, order.Id);
-                            
+
+                            if(!order.Products.Contains(await _productService.GetProductModelAsync(item.Key)))
+                            {
+                                order.Products.Add(await _productService.GetProductModelAsync(item.Key));
+                            }
                             if(item.Value==0)
                             {
                                 order.Products.Remove(await _productService.GetProductModelAsync(item.Key));
@@ -285,7 +288,7 @@ public class OrderService : IOrderService
 
                         await _stockMovementService.CreateStockOutMovementAsync(newProductStock, order.Id);
 
-                        if(orderView.Products != null && !orderView.Products.Contains(await _productService.GetProductModelAsync(item.Key)))
+                        if(!order.Products.Contains(await _productService.GetProductModelAsync(item.Key)))
                         {
                             order.Products.Add(await _productService.GetProductModelAsync(item.Key));
                         }
