@@ -127,6 +127,15 @@ namespace Examen.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,City,Street,Number,Apartment,Notes,PostalCode,ClientId")] AddressEditViewModel addressView)
         {
+            var address = await _addressService.GetAddressByIdAsync(id);
+
+            if (await _clientService.ClientHasOrdersAsync(address.ClientId))
+            {
+                ModelState.AddModelError(string.Empty, "No se puede cambiar el cliente de direcciones con pedidos asociados.");
+                addressView.Clients = await _clientService.GetClientsWithoutAddressAsync();
+                
+                return View(addressView);
+            }
             if (await _addressService.EditAddressAsync(id, addressView))
             {
                 return RedirectToAction(nameof(Index));
