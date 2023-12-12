@@ -1,4 +1,5 @@
 @model Examenes.ViewModels.OrderDetailsStockViewModel;
+@using Examenes.Models;
 
 @{
     ViewData["Title"] = "Details";
@@ -21,11 +22,12 @@
 
             @foreach (var item in Model.StockMovements)
             {
-                <tr>
-                    <div class="row">
-                        <td class="col-3"><p class="m-none">@item.Product.Name - @item.Product.Description</p></td>
-                        <td class="col-3"><p>@item.MovementType</p></td>
-                        <td class="col-3"><p>@item.Quantity</p></td>
+
+                <tr class="@(item.MovementType == MovementType.In ? "text-success" : "text-danger")">
+                    <div class="row ">
+                        <td class="col-3"><p class="m-none"><b>@item.Product.Name - @item.Product.Description</b></p></td>
+                        <td class="col-3"><p><b>@item.MovementType</b></p></td>
+                        <td class="col-3"><p><b>@item.Quantity</b></p></td>
                     </div>
                 </tr>
             }
